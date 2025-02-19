@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+    <h1>Upload an Image</h1>
+
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    {% if image_url %}
+        <h2>Uploaded Image</h2>
+        <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 650px; max-height: 350px; height: auto; width: auto;">
+    {% endif %}
+
+    {% if labels %}
+        <h2>Detected Labels</h2>
+        <ul>
+            {% for label in labels %}
+                <li>{{ label.Name }} (Confidence: {{ label.Confidence }}%)</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
