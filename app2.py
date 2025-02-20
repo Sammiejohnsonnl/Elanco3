@@ -78,14 +78,28 @@ def index():
     return render_template("index.html", labels=labels, image_url=image_url)
 
 
-def get_custom_labels(image_path):
+def get_custom_labels(image_path, animal):
 
+    # old cows
+    # ProjectVersionArn='arn:aws:rekognition:eu-west-1:766780738096:project/ElancoImage/version/ElancoImage.2025-02-08T14.39.24/1739025555963',            
+    # new cows
+    # ProjectVersionArn='arn:aws:rekognition:eu-west-1:766780738096:project/Elanco_cows/version/Elanco_cows.2025-02-20T14.31.58/1740061917310',
+    # dogs
+    # ProjectVersionArn='arn:aws:rekognition:eu-west-1:766780738096:project/Elanco_dogs/version/Elanco_dogs.2025-02-20T12.50.36/1740055835916',
+    # cats
+    # ProjectVersionArn='arn:aws:rekognition:eu-west-1:766780738096:project/Elanco_cats/version/Elanco_cats.2025-02-20T13.35.58/1740058557393',
+
+    animal_project_version_arns = {
+        'Cow': 'arn:aws:rekognition:eu-west-1:766780738096:project/Elanco_cows/version/Elanco_cows.2025-02-20T14.31.58/1740061917310',
+        'Dog': 'arn:aws:rekognition:eu-west-1:766780738096:project/Elanco_dogs/version/Elanco_dogs.2025-02-20T12.50.36/1740055835916',
+        'Cat': 'arn:aws:rekognition:eu-west-1:766780738096:project/Elanco_cats/version/Elanco_cats.2025-02-20T13.35.58/1740058557393'
+    }
     # opening file as a binary file (AWS Rekognition requires binary file)
     with open(image_path, 'rb') as image:
 
         response = rekognition.detect_custom_labels(
             Image={'Bytes': image.read()},
-            ProjectVersionArn='arn:aws:rekognition:eu-west-1:766780738096:project/ElancoImage/version/ElancoImage.2025-02-08T14.39.24/1739025555963',
+            ProjectVersionArn=animal_project_version_arns[animal],        
             MinConfidence=50.0
         )
     
@@ -112,6 +126,15 @@ def get_standard_labels(image_path):
     cow_instances = [instance for label in cow_labels for instance in label['Instances']]
     cow_bounding_boxes = [instance['BoundingBox'] for instance in cow_instances]
 
+    cat_labels = [label for label in response['Labels'] if label['Name'] == 'Cat']
+    cat_instances = [instance for label in cat_labels for instance in label['Instances']]
+    cat_bounding_boxes = [instance['BoundingBox'] for instance in cat_instances]
+
+    dog_labels = [label for label in response['Labels'] if label['Name'] == 'Dog']
+    dog_instances = [instance for label in dog_labels for instance in label['Instances']]
+    dog_bounding_boxes = [instance['BoundingBox'] for instance in dog_instances]
+
+    bounding_dictionary = {'Cow': cow_bounding_boxes, 'Cat': cat_bounding_boxes, 'Dog': dog_bounding_boxes}
     # print('**********')
     # print(cow_bounding_boxes)
     # print('**********')
@@ -122,50 +145,98 @@ def get_standard_labels(image_path):
     image_width, image_height = pil_image.size
     index = 1
     behaviours = []
-    for cow_bounding_box in cow_bounding_boxes:
-        width = cow_bounding_box['Width']
-        height = cow_bounding_box['Height']
-        left = cow_bounding_box['Left']
-        top = cow_bounding_box['Top']
 
-        pil_left = left * image_width
-        pil_top = top * image_height
-        pil_right = (left + width) * image_width
-        pil_bottom = (top + height) * image_height
+    for animal in bounding_dictionary:
+        bounding_boxes = bounding_dictionary[animal]
+        for bounding_box in bounding_boxes:
+            width = bounding_box['Width']
+            height = bounding_box['Height']
+            left = bounding_box['Left']
+            top = bounding_box['Top']
 
-        cropped_image = pil_image.crop((pil_left, pil_top, pil_right, pil_bottom))
-        cropped_width, cropped_height = cropped_image.size
+            pil_left = left * image_width
+            pil_top = top * image_height
+            pil_right = (left + width) * image_width
+            pil_bottom = (top + height) * image_height
 
-        draw = ImageDraw.Draw(pil_image)
-        if (cropped_width > 70 and cropped_height > 70):
-            # cropped_image.show()
+            cropped_image = pil_image.crop((pil_left, pil_top, pil_right, pil_bottom))
+            cropped_width, cropped_height = cropped_image.size
 
-            cropped_path = image_path.split('.')[0] + f'_cropped_{index}.jpg'
-            cropped_image.save(cropped_path)
+            draw = ImageDraw.Draw(pil_image)
+            if (cropped_width > 70 and cropped_height > 70):
+                # cropped_image.show()
 
-            behaviour = get_custom_labels(cropped_path)
-            if len(behaviour) == 0:
-                behaviour.append({'Name': 'No behaviour detected', 'Confidence': 100.0})
-            behaviour[0]["animal_id"] = f'Cow_{index}'
-            behaviours.append(behaviour)
+                cropped_path = image_path.split('.')[0] + f'_cropped_{index}.jpg'
+                cropped_image.save(cropped_path)
 
-            draw.rectangle([pil_left, pil_top, pil_right, pil_bottom], outline='red', width=2)
-            cropped_label = f'cow_{index}'
-            draw.text((pil_left, pil_top - 25), cropped_label, font=ImageFont.truetype("arial.ttf", 15), fill='red')
-            # pil_image.show()
-            # print('#####################')
-            # print(behaviour)
-            # print('#####################')
+                behaviour = get_custom_labels(cropped_path, animal)
+                if len(behaviour) == 0:
+                    behaviour.append({'Name': 'No behaviour detected', 'Confidence': 100.0})
+                behaviour[0]["animal_id"] = f'{animal}_{index}'
+                behaviours.append(behaviour)
 
-            index += 1
-        
-    pil_image.show()
-        # draw_image_path = image_path.split('.')[0] + '_draw.jpg'
-        # pil_image.save(draw_image_path)
+                draw.rectangle([pil_left, pil_top, pil_right, pil_bottom], outline='red', width=2)
+                cropped_label = f'{animal}_{index}'
+                draw.text((pil_left, pil_top - 25), cropped_label, font=ImageFont.truetype("arial.ttf", 15), fill='red')
+                # pil_image.show()
+                # print('#####################')
+                # print(behaviour)
+                # print('#####################')
+
+                index += 1
+    print('**********')
     print(behaviours)
-
-    # return response.get('Labels', [])
+    pil_image.show()
+    # draw_image_path = image_path.split('.')[0] + '_draw.jpg'
+    # pil_image.save(draw_image_path)
     return behaviours
+
+    # # return response.get('Labels', [])
+    # return behaviours
+    # for bounding_box in bounding_boxes:
+    #     width = bounding_box['Width']
+    #     height = bounding_box['Height']
+    #     left = bounding_box['Left']
+    #     top = bounding_box['Top']
+
+    #     pil_left = left * image_width
+    #     pil_top = top * image_height
+    #     pil_right = (left + width) * image_width
+    #     pil_bottom = (top + height) * image_height
+
+    #     cropped_image = pil_image.crop((pil_left, pil_top, pil_right, pil_bottom))
+    #     cropped_width, cropped_height = cropped_image.size
+
+    #     draw = ImageDraw.Draw(pil_image)
+    #     if (cropped_width > 70 and cropped_height > 70):
+    #         # cropped_image.show()
+
+    #         cropped_path = image_path.split('.')[0] + f'_cropped_{index}.jpg'
+    #         cropped_image.save(cropped_path)
+
+    #         behaviour = get_custom_labels(cropped_path)
+    #         if len(behaviour) == 0:
+    #             behaviour.append({'Name': 'No behaviour detected', 'Confidence': 100.0})
+    #         behaviour[0]["animal_id"] = f'Cow_{index}'
+    #         behaviours.append(behaviour)
+
+    #         draw.rectangle([pil_left, pil_top, pil_right, pil_bottom], outline='red', width=2)
+    #         cropped_label = f'cow_{index}'
+    #         draw.text((pil_left, pil_top - 25), cropped_label, font=ImageFont.truetype("arial.ttf", 15), fill='red')
+    #         # pil_image.show()
+    #         # print('#####################')
+    #         # print(behaviour)
+    #         # print('#####################')
+
+    #         index += 1
+        
+    # pil_image.show()
+    #     # draw_image_path = image_path.split('.')[0] + '_draw.jpg'
+    #     # pil_image.save(draw_image_path)
+    # print(behaviours)
+
+    # # return response.get('Labels', [])
+    # return behaviours
 
 
 @app.route('/uploads/<filename>')
