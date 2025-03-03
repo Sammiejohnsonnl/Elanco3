@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///animal_behavior_db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Custom Vision settings for animal and behavior detection
+# Custom Vision settings for animal & behavior detection
 CUSTOM_PREDICTION_KEY = "2THQqGizFxlQbwZcRe5MUAxor5Mamk9T0YaaR6CrmYNrKRYmPPOyJQQJ99BBACYeBjFXJ3w3AAAIACOGgb3N"
 CUSTOM_ENDPOINT = "https://elancogeneraltraining-prediction.cognitiveservices.azure.com/"
 BEHAVIOR_PROJECT_ID = "1b0da672-a88c-4012-a141-89b899276dee"
