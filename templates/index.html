@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Behavior Analysis | Powered by AI</title>
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </div>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#analysis">Analysis</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Animal Behavior Analysis</h1>
+                <p>Advanced AI-powered analysis to understand and categorize animal behavior</p>
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div class="upload-container">
+                        <input type="file" id="file-input" name="file" accept="image/*">
+                        <button type="submit">Analyze Image</button>
+                    </div>
+                </form>
+
+                <div id="image-preview-container" style="display: none;">
+                    <img id="image-preview" alt="Preview" style="max-width: 400px; margin: 20px 0;">
+                </div>
+
+                <div id="result" class="result-container">
+                    <div id="loading" style="display: none;">
+                        <p>Analyzing image...</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar"></div>
+                        </div>
+                    </div>
+                    <div id="predictions-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="icon-container">
+                <div class="icon-item">
+                    <img src="{{ url_for('static', filename='images/upload.png') }}" alt="Upload">
+                    <p>Upload</p>
+                </div>
+                <div class="icon-item">
+                    <img src="{{ url_for('static', filename='images/analysis.png') }}" alt="Analysis">
+                    <p>Analysis</p>
+                </div>
+                <div class="icon-item">
+                    <img src="{{ url_for('static', filename='images/results.png') }}" alt="Results">
+                    <p>Results</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: contact@example.com</p>
+                <p>Phone: (123) 456-7890</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('file-input');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const resultDiv = document.getElementById('result');
+        const loadingDiv = document.getElementById('loading');
+        const predictionsList = document.getElementById('predictions-list');
+
+        // Image preview functionality
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            loadingDiv.style.display = 'block';
+            predictionsList.innerHTML = '';
+
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.status === 429) {
+                    predictionsList.innerHTML = `
+                        <div class="error">
+                            Service is busy. Please wait a moment and try again.
+                        </div>`;
+                    return;
+                }
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    predictionsList.innerHTML = `<div class="error">${data.error}</div>`;
+                } else {
+                    let resultsHtml = `
+                        <div class="labeled-image">
+                            <h3>Analyzed Image:</h3>
+                            <img src="data:image/jpeg;base64,${data.labeled_image}" alt="Labeled image">
+                        </div>
+                        <div class="scene-analysis">
+                            <h3>Scene Analysis:</h3>
+                            <p><strong>Description:</strong> ${data.scene_analysis.description}</p>
+                            <p><strong>Objects Detected:</strong> ${data.scene_analysis.objects_detected.join(', ')}</p>
+                            <p><strong>Tags:</strong> ${data.scene_analysis.tags.join(', ')}</p>
+                        </div>
+                        <div class="detected-objects">
+                            <h3>Detected Objects and Behaviors:</h3>
+                            <ul>
+                    `;
+                    
+                    data.labeled_objects.forEach(obj => {
+                        resultsHtml += `
+                            <li>
+                                <strong>${obj.type}</strong>: ${obj.behavior} (${obj.confidence})
+                            </li>
+                        `;
+                    });
+                    
+                    resultsHtml += '</ul></div>';
+                    predictionsList.innerHTML = resultsHtml;
+                }
+            } catch (error) {
+                predictionsList.innerHTML = '<div class="error">Error analyzing image. Please try again.</div>';
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
