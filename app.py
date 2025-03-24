@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///animal_behavior_db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Custom Vision settings for animal & behavior detection
+# Custom Vision settings for animal and behavior detection
 CUSTOM_PREDICTION_KEY = "2THQqGizFxlQbwZcRe5MUAxor5Mamk9T0YaaR6CrmYNrKRYmPPOyJQQJ99BBACYeBjFXJ3w3AAAIACOGgb3N"
 CUSTOM_ENDPOINT = "https://elancogeneraltraining-prediction.cognitiveservices.azure.com/"
 BEHAVIOR_PROJECT_ID = "1b0da672-a88c-4012-a141-89b899276dee"
@@ -90,7 +90,7 @@ def expand_bounding_box(box, image_width, image_height, expansion_factor=0.2):
     
     return (int(new_x), int(new_y), int(new_w), int(new_h))
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/analysis', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -282,6 +282,27 @@ def index():
             return jsonify({'error': f'An error occurred: {str(e)}'}), 500
 
     return render_template('index.html')
+
+@app.route('/home')
+def home():
+    """Render the home page"""
+    return render_template('home.html')
+
+# Make the home page the default landing page
+@app.route('/')
+def default():
+    """Redirect to home page"""
+    return render_template('home.html')
+
+@app.route('/login')
+def login():
+    """Render the login page"""
+    return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    """Render the signed-in dashboard page"""
+    return render_template('index_signed_in.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
