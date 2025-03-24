@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elanco Animal Behavior Analysis | Home</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Background shapes -->
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                Elanco
+            </div>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="{{ url_for('index') }}">Analysis</a>
+                <a href="#contact">Contact</a>
+                <a href="{{ url_for('login') }}" class="login-link">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-large">
+            <div class="badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                </svg>
+                POWERED BY AZURE VISION AI
+            </div>
+            
+            <h1>Revolutionizing <span>Animal Care</span> Through AI</h1>
+            <p>Our advanced AI platform helps veterinarians, farmers, and pet owners understand animal behavior and detect health issues early</p>
+            
+            <a href="{{ url_for('index') }}" class="cta-button" style="display: inline-flex; margin-top: 1rem;">
+                Try Analysis Tool
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </a>
+        </section>
+
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Accuracy Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Animal Species</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Behaviors Detected</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Daily Analyses</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                        </svg>
+                    </div>
+                    <h3>Real-Time Analysis</h3>
+                    <p>Upload an image and get instant analysis of animal behavior and health indicators.</p>
+                    <a href="{{ url_for('index') }}" class="cta-button" style="width: 100%;">Try Now</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                            <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
+                        </svg>
+                    </div>
+                    <h3>Comprehensive Reports</h3>
+                    <p>Get detailed reports on animal behavior, including confidence scores and recommended actions.</p>
+                    <a href="{{ url_for('index') }}" class="cta-button" style="width: 100%;">Learn More</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M9.828 4a3 3 0 0 1-2.12-.879l-.83-.828A1 1 0 0 0 6.173 2H2.5a1 1 0 0 0-1 .981L1.546 4h-1L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3v1z"/>
+                            <path fill-rule="evenodd" d="M13.81 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zM2.19 3A2 2 0 0 0 .198 5.181l.637 7A2 2 0 0 0 2.826 14h10.348a2 2 0 0 0 1.991-1.819l.637-7A2 2 0 0 0 13.81 3H2.19z"/>
+                        </svg>
+                    </div>
+                    <h3>Multiple Animal Detection</h3>
+                    <p>Our AI can detect and analyze multiple animals in a single image, perfect for herd monitoring.</p>
+                    <a href="{{ url_for('index') }}" class="cta-button" style="width: 100%;">Explore</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <h2 style="text-align: center; margin-bottom: 3rem;">What Our Users Say</h2>
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>This tool has revolutionized how we monitor our livestock. Being able to quickly identify abnormal behaviors has helped us address health issues before they become serious problems.</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <div style="width: 100%; height: 100%; background-color: #4863E0; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">JD</div>
+                    </div>
+                    <div class="author-info">
+                        <h4>John Doe</h4>
+                        <p>Cattle Farmer, Iowa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>As a veterinarian, I've found this AI tool incredibly helpful for preliminary assessments. The behavior analysis gives me valuable insights before I even examine the animal in person.</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <div style="width: 100%; height: 100%; background-color: #4863E0; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">JS</div>
+                    </div>
+                    <div class="author-info">
+                        <h4>Dr. Jane Smith</h4>
+                        <p>Veterinarian, California</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>Ready to Transform Animal Care?</h2>
+            <p style="max-width: 600px; margin: 1rem auto 2rem;">Try our AI-powered animal behavior analysis tool today and gain valuable insights into your animals' health and wellbeing.</p>
+            <a href="{{ url_for('index') }}" class="cta-button" style="display: inline-flex;">
+                Start Analyzing Now
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: contact@example.com</p>
+                <p>Phone: (123) 456-7890</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+                <a href="{{ url_for('index') }}">Analysis Tool</a>
+            </div>
+            <div class="footer-section">
+                <h4>About</h4>
+                <p>Powered by Azure Vision AI</p>
+                <p>© 2023 Elanco. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
