@@ -436,7 +436,7 @@ body {
 }
 
 .testimonial-content:before {
-    content: """;
+    content: "";
     font-size: 4rem;
     color: rgba(107, 131, 255, 0.1);
     position: absolute;
@@ -816,4 +816,59 @@ body {
         top: 40px;
         right: -100px;
     }
+}
+
+.pets-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Add space between the pet profiles */
+    justify-content: center; /* Center-align all pet cards */
+}
+
+.pet-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+
+.pet-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.pet-card h3, .pet-card p {
+    text-align: center;
+}
+
+
+.pet-card button {
+    margin: 0.5rem auto; /* Center the buttons */
+    display: block;
+}
+
+#no-pets-message {
+    text-align: center; /* Centering the container */
+}
+
+#no-pets-message button {
+    margin: 1rem auto; /* Ensures the button is centered */
+}
+
+#pets-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the button and container */
+    gap: 20px; /* Space between the button and pet profiles */
+}
+
+.cta-button {
+    margin: 0 auto; /* Centers the button */
+    width: fit-content; /* Ensures button doesn't span unnecessarily */
 }

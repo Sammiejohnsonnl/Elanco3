@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from azure.cognitiveservices.vision.customvision.prediction import CustomVisionPredictionClient
 from msrest.authentication import ApiKeyCredentials, CognitiveServicesCredentials
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
@@ -11,8 +11,11 @@ from time import sleep
 from azure.core.exceptions import HttpResponseError
 
 app = Flask(__name__, static_folder='static')
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+# Secret key to enable managing sessions & flash()
+app.secret_key = 'elancoproj'
 
 # SQLite database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///animal_behavior_db.sqlite3'
@@ -52,6 +55,18 @@ class Behavior(db.Model):
     behavior_name = db.Column(db.String(255), unique=True, nullable=False)
     description = db.Column(db.Text)
     solutions = db.Column(db.Text)  # Possible solutions to take
+
+class Pet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    animal_type = db.Column(db.String(255), nullable=False)
+    breed = db.Column(db.String(255))
+    age = db.Column(db.Integer)
+    height = db.Column(db.Float)
+    weight = db.Column(db.Float)
+    last_vet_visit = db.Column(db.String(255))  # Store as text
+    image = db.Column(db.String(255))  # Path to the uploaded image
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
 
 # Create database tables within an application context
 with app.app_context():
@@ -303,6 +318,63 @@ def login():
 def dashboard():
     """Render the signed-in dashboard page"""
     return render_template('index_signed_in.html')
+
+@app.route('/pets', methods=['GET', 'POST'])
+def pets():
+    if request.method == 'POST':
+        # Handles form submission
+        pet_id = request.form.get('pet_id')  # Hidden field for edit functionality
+        pet_data = {
+            "name": request.form['pet_name'],
+            "animal_type": request.form['animal'],
+            "breed": request.form.get('breed'),
+            "age": request.form.get('age'),
+            "height": request.form.get('height'),
+            "weight": request.form.get('weight'),
+            "last_vet_visit": request.form.get('last_vet_visit'),
+            "image": None,
+        }
+        
+        # Handle image upload
+        if 'image' in request.files and request.files['image'].filename != '':
+            image_file = request.files['image']
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_file.filename)
+            image_file.save(image_path)
+            pet_data['image'] = image_path
+        else:
+            # If no new image is uploaded, retain the current image
+            if pet_id:
+                pet = Pet.query.get(pet_id)
+                if pet:
+                    pet_data['image'] = pet.image
+
+        # Edit existing pet or add new pet
+        if pet_id:
+            pet = Pet.query.get(pet_id)
+            if pet:
+                for key, value in pet_data.items():
+                    setattr(pet, key, value)
+        else:
+            new_pet = Pet(**pet_data)
+            db.session.add(new_pet)
+
+        db.session.commit()
+        flash('Pet details saved successfully!')
+        return redirect(url_for('pets'))
+    
+    # Fetch all pets for display
+    all_pets = Pet.query.all()
+    return render_template('pet_profile.html', pets=all_pets)
+
+@app.route('/delete-pet/<int:id>', methods=['GET', 'POST'])
+def delete_pet(id):
+    pet = Pet.query.get(id)
+    if pet:
+        db.session.delete(pet)
+        db.session.commit()
+        flash('Pet profile deleted successfully!')
+    return redirect(url_for('pets'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
