@@ -7,4 +7,3 @@
 4. Michal Obrycki (Product Owner)
 5. Samuel Okunowo (Scrum Master)
 
-[Document](https://docs.google.com/document/d/1YTcJwO3JVJeuCVhCzqj54o3KT-Tmlzh31BWXrSmASkY/edit?usp=sharing)
