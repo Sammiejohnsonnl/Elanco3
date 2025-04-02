@@ -35,6 +35,7 @@ Follow these steps to set up and run the app locally:
 ##
       cd Elanco3
       git checkout azureAIPrototype
+##
 
 ### **2. Set Up a Virtual Environment**
 
