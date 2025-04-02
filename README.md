@@ -139,6 +139,6 @@ The app has been tested with:
 
 ## **Repository Link**
 
-Explore the source code here: GitHub Repository
+Explore the source code here: [GitHub Repository](https://github.com/Sammiejohnsonnl/Elanco3.git)
 Switch to the azureAIPrototype branch to access the source code:
 git checkout azureAIPrototype
