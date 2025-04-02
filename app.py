@@ -337,19 +337,33 @@ def pets():
     all_pets = Pet.query.all()
     return render_template('pet_profile.html', pets=all_pets)
 
-
-@app.route('/delete-pet/<int:id>', methods=['POST'])
+@app.route('/delete-pet/<int:id>', methods=['GET', 'POST'])
 def delete_pet(id):
-    # Handles deleting a pet profile by ID
     pet = Pet.query.get(id)
     if pet:
         db.session.delete(pet)
         db.session.commit()
         flash('Pet profile deleted successfully!')
-    else:
-        flash('Pet not found!')
     return redirect(url_for('pets'))
 
+@app.route('/request-animal', methods=['GET'])
+def request_animal():
+    return render_template('request_animal.html')
+
+@app.route('/pet-live-activity', methods=['GET'])
+def petliveactivity():
+    """Render the pet live activity page"""
+    return render_template('petliveactivity.html')
+
+@app.route('/petowner-profile', methods=['GET'])
+def petownerprofile():
+    """Render the pet owner profile page"""
+    return render_template('petowner_profile.html')
+
+@app.route('/petpage-analysis', methods=['GET'])
+def petpageanalysis():
+    """Render the pet page analysis"""
+    return render_template('petpage_analysis')
 
 if __name__ == '__main__':
     app.run(debug=True)

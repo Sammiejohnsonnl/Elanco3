@@ -1,173 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Pet Profile Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
-</head>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <style>
+      html,
+      body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+      }
+    </style>
+  </head>
 
-<body>
+  <body>
     <!-- Background shapes -->
     <div class="bg-shape bg-shape-1"></div>
     <div class="bg-shape bg-shape-2"></div>
     <div class="pet-page">
-        <header>
-            <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-icon"></div>
-                    Elanco
+      <header>
+        <nav class="navbar">
+          <div class="logo">
+            <div class="logo-icon"></div>
+            Elanco
+          </div>
+          <button class="mobile-menu-button" id="mobile-menu-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+              />
+            </svg>
+          </button>
+          <div class="nav-links" id="nav-links">
+            <a href="{{ url_for('default') }}">Home</a>
+            <a href="{{ url_for('pets') }}">My Pets</a>
+            <a href="{{ url_for('analysis') }}">Analysis</a>
+            <a href="#history">History</a>
+            <a href="#vets">Find Vet</a>
+            <div class="user-profile">
+              <div class="user-avatar" id="user-avatar">
+                <span>JD</span>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu">
+                <div class="dropdown-header">
+                  <p>John Doe</p>
+                  <p class="user-email">john.doe@example.com</p>
                 </div>
-                <div class="nav-links">
-                    <a href="{{ url_for('default') }}">Home</a>
-                    <a href="#about">About</a>
-                    <a href="#services">Services</a>
-                    <a href="{{ url_for('analysis') }}">Analysis</a>
-                    <a href="#contact">Contact</a>
-                    <a href="{{ url_for('login') }}" class="login-link">Login</a>
-                    <a href="{{ url_for('default') }}" class="cta-button">Back to Home</a>
-                </div>
-            </nav>
-        </header>
-        
-
-        <main>
-            <center>
-                <h1>Pet Profile</h1>
-            <p>Your Pets</p>
-            <button class="cta-button"
-                                onclick="document.getElementById('pet-modal').style.display='block';">
-                            Add Another Pet
-                        </button>
-            </center>
-
-            
-
-            <section class="hero">
-                <div class="badge">
-
-                    {% if pets %}
-                    <div id="pets-container">
-                        
-                        <div class="pets-list">
-                            {% for pet in pets %}
-                            <div class="pet-card">
-                                <img src="{{ pet.image or url_for('static', filename='default-pet-image.jpg') }}" alt="{{ pet.name }}">
-                                <h3>{{ pet.name }}</h3>
-                                <p>{{ pet.animal_type }} - {{ pet.breed }}</p>
-                                <button class="cta-button"
-                                        onclick="editPet('{{ pet.id }}', '{{ pet.name }}', '{{ pet.animal_type }}', '{{ pet.breed }}', '{{ pet.age }}', '{{ pet.height }}', '{{ pet.weight }}', '{{ pet.last_vet_visit }}');">
-                                    Edit
-                                </button>
-                                <button class="cta-button delete-button"
-                                        onclick="confirmDelete('{{ pet.id }}');">
-                                    Delete
-                                </button>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    
-                    
-                    
-                    
-                    {% else %}
-                    <div id="no-pets-message">
-                        <p>You don't have any pets added yet.</p>
-                        <center><button class="cta-button"
-                                onclick="document.getElementById('pet-modal').style.display='block';">
-                                Add a Pet
-                            </button>
-                        </center>
-                    </div>
-                    {% endif %}
-        </main>
-
-        <!-- Modal Form -->
-        <div class="upload-container">
-            <div id="pet-modal" class="modal" style="display: none">
-                <div class="modal-content">
-                    <span class="close"
-                        onclick="document.getElementById('pet-modal').style.display='none';">&times;</span>
-                    <form method="POST" enctype="multipart/form-data">
-                        <input type="hidden" id="pet-id" name="pet_id" />
-
-                        <div class="form-group">
-                            <label for="pet-name">Pet Name</label>
-                            <input type="text" id="pet-name" name="pet_name" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="animal">Animal Type</label>
-                            <input type="text" id="animal" name="animal" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="breed">Breed</label>
-                            <input type="text" id="breed" name="breed" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="age">Age</label>
-                            <input type="number" id="age" name="age" min="0" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="height">Height (cm)</label>
-                            <input type="number" id="height" name="height" min="0" step="0.1" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="weight">Weight (kg)</label>
-                            <input type="number" id="weight" name="weight" min="0" step="0.1" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="last-vet-visit">Last Vet Visit</label>
-                            <input type="date" id="last-vet-visit" name="last_vet_visit" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image">Image</label>
-                            <input type="file" id="image" name="image" accept="image/*" />
-                        </div>
-
-                        <button type="submit" class="cta-button">Save Pet</button>
-                    </form>
-                </div>
+                <div class="dropdown-divider"></div>
+                <a href="#profile">My Profile</a>
+                <a href="{{ url_for('pets') }}">My Pets</a>
+                <a href="#settings">Settings</a>
+                <div class="dropdown-divider"></div>
+                <a href="{{ url_for('login') }}" class="logout-link"
+                  >Sign Out</a
+                >
+              </div>
             </div>
-        </div>
-    </div>
-</body>
+          </div>
+        </nav>
+      </header>
 
-<script>
-    function editPet(id, name, animal, breed, age, height, weight, lastVetVisit) {
+      <div class="page-header">
+        <a href="{{ url_for('dashboard') }}" class="back-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+            />
+          </svg>
+          Back to Dashboard
+        </a>
+        <h1>My Pets</h1>
+        <p>Manage your pets' profiles and keep track of their information</p>
+      </div>
+
+      <main>
+        <section class="hero">
+          {% if pets %}
+          <div id="pets-container">
+            <button class="cta-button" onclick="addPet()">
+              Add Another Pet
+            </button>
+            <div class="pets-list">
+              {% for pet in pets %}
+              <div class="pet-card">
+                {% if pet.image %}
+                <img src="{{ pet.image }}" alt="{{ pet.name }}" />
+                {% else %}
+                <div class="pet-placeholder">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="80"
+                    height="80"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"
+                    />
+                    <path
+                      d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"
+                    />
+                  </svg>
+                  <p>No image uploaded</p>
+                </div>
+                {% endif %}
+                <h3>{{ pet.name }}</h3>
+                <p>
+                  {{ pet.animal_type }} {% if pet.breed %}- {{ pet.breed }}{%
+                  endif %}
+                </p>
+                <div class="pet-details">
+                  {% if pet.age %}
+                  <p><strong>Age:</strong> {{ pet.age }} years</p>
+                  {% endif %} {% if pet.weight %}
+                  <p><strong>Weight:</strong> {{ pet.weight }} kg</p>
+                  {% endif %} {% if pet.height %}
+                  <p><strong>Height:</strong> {{ pet.height }} cm</p>
+                  {% endif %} {% if pet.last_vet_visit %}
+                  <p>
+                    <strong>Last Vet Visit:</strong> {{ pet.last_vet_visit }}
+                  </p>
+                  {% endif %}
+                </div>
+                <div class="pet-actions">
+                  <button
+                    class="cta-button"
+                    onclick="editPet('{{ pet.id }}', '{{ pet.name }}', '{{ pet.animal_type }}', '{{ pet.breed }}', '{{ pet.age }}', '{{ pet.height }}', '{{ pet.weight }}', '{{ pet.last_vet_visit }}');"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    class="cta-button delete-button"
+                    onclick="confirmDelete('{{ pet.id }}');"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% else %}
+          <div id="no-pets-message">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="80"
+              height="80"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"
+              />
+            </svg>
+            <p>You don't have any pets added yet.</p>
+            <button class="cta-button" onclick="addPet()">Add a Pet</button>
+          </div>
+          {% endif %}
+        </section>
+      </main>
+
+      <!-- Modal Form -->
+      <div id="pet-modal" class="modal" style="display: none">
+        <div class="modal-content">
+          <span
+            class="close"
+            onclick="document.getElementById('pet-modal').style.display='none';"
+            >&times;</span
+          >
+          <h2 id="modal-title">Add New Pet</h2>
+          <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" id="pet-id" name="pet_id" />
+
+            <div class="form-group">
+              <label for="pet-name">Pet Name</label>
+              <input type="text" id="pet-name" name="pet_name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="animal">Animal Type</label>
+              <input type="text" id="animal" name="animal" required />
+            </div>
+
+            <div class="form-group">
+              <label for="breed">Breed</label>
+              <input type="text" id="breed" name="breed" />
+            </div>
+
+            <div class="form-group">
+              <label for="age">Age</label>
+              <input type="number" id="age" name="age" min="0" />
+            </div>
+
+            <div class="form-group">
+              <label for="height">Height (cm)</label>
+              <input
+                type="number"
+                id="height"
+                name="height"
+                min="0"
+                step="0.1"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="weight">Weight (kg)</label>
+              <input
+                type="number"
+                id="weight"
+                name="weight"
+                min="0"
+                step="0.1"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="last-vet-visit">Last Vet Visit</label>
+              <input type="date" id="last-vet-visit" name="last_vet_visit" />
+            </div>
+
+            <div class="form-group">
+              <label for="image">Image</label>
+              <input type="file" id="image" name="image" accept="image/*" />
+            </div>
+
+            <button type="submit" class="cta-button">Save Pet</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Mobile menu toggle
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const navLinks = document.getElementById("nav-links");
+
+      mobileMenuButton.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
+
+      // User dropdown toggle
+      const userAvatar = document.getElementById("user-avatar");
+      const dropdownMenu = document.getElementById("dropdown-menu");
+
+      userAvatar.addEventListener("click", () => {
+        dropdownMenu.classList.toggle("show");
+      });
+
+      // Close dropdown when clicking elsewhere
+      window.addEventListener("click", (event) => {
+        if (
+          !event.target.matches(".user-avatar") &&
+          !event.target.closest(".user-avatar")
+        ) {
+          if (dropdownMenu.classList.contains("show")) {
+            dropdownMenu.classList.remove("show");
+          }
+        }
+      });
+
+      function editPet(
+        id,
+        name,
+        animal,
+        breed,
+        age,
+        height,
+        weight,
+        lastVetVisit
+      ) {
+        // Update modal title
+        document.getElementById("modal-title").innerText = "Edit Pet";
+
         // Display the modal
-        document.getElementById('pet-modal').style.display = 'block';
+        document.getElementById("pet-modal").style.display = "block";
 
         // Populate form fields with existing pet data
-        document.getElementById('pet-id').value = id;
-        document.getElementById('pet-name').value = name;
-        document.getElementById('animal').value = animal;
-        document.getElementById('breed').value = breed;
-        document.getElementById('age').value = age || '';
-        document.getElementById('height').value = height || '';
-        document.getElementById('weight').value = weight || '';
-        document.getElementById('last-vet-visit').value = lastVetVisit || '';
-        document.getElementById('image').value = pet.image || '';
-        document.getElementById('pet-modal').style.display = 'block';
+        document.getElementById("pet-id").value = id;
+        document.getElementById("pet-name").value = name;
+        document.getElementById("animal").value = animal;
+        document.getElementById("breed").value = breed || "";
+        document.getElementById("age").value = age || "";
+        document.getElementById("height").value = height || "";
+        document.getElementById("weight").value = weight || "";
+        document.getElementById("last-vet-visit").value = lastVetVisit || "";
+      }
 
-
-    }
-
-    function confirmDelete(id) {
+      function confirmDelete(id) {
         // Show confirmation dialog
-        if (confirm('Are you sure you want to delete this pet?')) {
-            // Redirect to a DELETE route
-            window.location.href = `/delete-pet/${id}`;
+        if (confirm("Are you sure you want to delete this pet?")) {
+          // Redirect to a DELETE route
+          window.location.href = `/delete-pet/${id}`;
         }
-    }
-</script>
+      }
 
+      // Add new pet function
+      function addPet() {
+        // Reset form
+        document.getElementById("pet-id").value = "";
+        document.getElementById("pet-name").value = "";
+        document.getElementById("animal").value = "";
+        document.getElementById("breed").value = "";
+        document.getElementById("age").value = "";
+        document.getElementById("height").value = "";
+        document.getElementById("weight").value = "";
+        document.getElementById("last-vet-visit").value = "";
+        document.getElementById("image").value = "";
+
+        // Update modal title
+        document.getElementById("modal-title").innerText = "Add New Pet";
+
+        // Display the modal
+        document.getElementById("pet-modal").style.display = "block";
+      }
+    </script>
+  </body>
 </html>

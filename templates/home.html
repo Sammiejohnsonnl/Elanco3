@@ -2,13 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Elanco Animal Behavior Analysis | Home</title>
     <link
       rel="stylesheet"
       type="text/css"
       href="{{ url_for('static', filename='styles.css') }}"
     />
+    <style>
+      html,
+      body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+      }
+    </style>
   </head>
   <body>
     <!-- Background shapes -->
@@ -21,6 +32,20 @@
           <div class="logo-icon"></div>
           Elanco
         </div>
+        <button class="mobile-menu-button" id="mobile-menu-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+            />
+          </svg>
+        </button>
         <div class="nav-links">
           <a href="#about">About</a>
           <a href="#services">Services</a>
@@ -98,13 +123,13 @@
 
       <section class="features">
         <h2 style="text-align: center; margin-bottom: 3rem">Key Features</h2>
-        <div class="features-grid">
-          <div class="feature-card">
+        <div class="features-grid" style="display: grid; gap: 2.5rem">
+          <div class="feature-card" style="margin-bottom: 1.5rem">
             <div class="feature-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="32"
+                height="32"
                 fill="currentColor"
                 viewBox="0 0 16 16"
               >
@@ -121,27 +146,23 @@
               Upload an image and get instant analysis of animal behavior and
               health indicators.
             </p>
-            <a
-              href="{{ url_for('analysis') }}"
-              class="cta-button"
-              style="width: 100%"
-              >Try Now</a
-            >
+            <a href="{{ url_for('analysis') }}" class="cta-button">Try Now</a>
           </div>
-          <div class="feature-card">
+          <div class="feature-card" style="margin-bottom: 1.5rem">
             <div class="feature-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="32"
+                height="32"
                 fill="currentColor"
                 viewBox="0 0 16 16"
               >
                 <path
-                  d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"
+                  d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2h-4V.5a.5.5 0 0 1 .5-.5.5.5 0
+                            0 0 .5-.5.5.5 0 0 1 .5-.5h1zM4.5 1h6a.5.5 0 0 1 .5.5v1H4v-1a.5.5 0 0 1 .5-.5z"
                 />
                 <path
-                  d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"
+                  d="M12 14V5H4v9a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2zM8 7.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132z"
                 />
               </svg>
             </div>
@@ -150,10 +171,7 @@
               Get detailed reports on animal behavior, including confidence
               scores and recommended actions.
             </p>
-            <a
-              href="{{ url_for('analysis') }}"
-              class="cta-button"
-              style="width: 100%"
+            <a href="{{ url_for('analysis') }}" class="cta-button"
               >Learn More</a
             >
           </div>
@@ -161,17 +179,16 @@
             <div class="feature-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="32"
+                height="32"
                 fill="currentColor"
                 viewBox="0 0 16 16"
               >
                 <path
-                  d="M9.828 4a3 3 0 0 1-2.12-.879l-.83-.828A1 1 0 0 0 6.173 2H2.5a1 1 0 0 0-1 .981L1.546 4h-1L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3v1z"
+                  d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"
                 />
                 <path
-                  fill-rule="evenodd"
-                  d="M13.81 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zM2.19 3A2 2 0 0 0 .198 5.181l.637 7A2 2 0 0 0 2.826 14h10.348a2 2 0 0 0 1.991-1.819l.637-7A2 2 0 0 0 13.81 3H2.19z"
+                  d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"
                 />
               </svg>
             </div>
@@ -180,12 +197,7 @@
               Our AI can detect and analyze multiple animals in a single image,
               perfect for herd monitoring.
             </p>
-            <a
-              href="{{ url_for('analysis') }}"
-              class="cta-button"
-              style="width: 100%"
-              >Explore</a
-            >
+            <a href="{{ url_for('analysis') }}" class="cta-button">Explore</a>
           </div>
         </div>
       </section>
@@ -306,5 +318,40 @@
         </div>
       </div>
     </footer>
+
+    <script>
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const navLinks = document.querySelector(".nav-links");
+
+      // Mobile menu toggle
+      mobileMenuButton.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
+    </script>
+
+    <style>
+      @media (max-width: 768px) {
+        .features-grid {
+          display: flex !important;
+          flex-direction: column;
+          gap: 3rem !important;
+        }
+
+        .feature-card {
+          margin-bottom: 2rem !important;
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* Add more space between content sections on mobile */
+        .features,
+        .testimonials,
+        .cta-section {
+          padding-top: 3rem;
+          padding-bottom: 3rem;
+          margin-top: 2rem;
+          margin-bottom: 2rem;
+        }
+      }
+    </style>
   </body>
 </html>

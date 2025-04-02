@@ -1,421 +1,440 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Animal Behavior Analysis | Powered by Azure Vision AI</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='styles.css') }}"
-    />
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elanco Animal Behavior Analysis | Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
     <!-- Background shapes -->
     <div class="bg-shape bg-shape-1"></div>
     <div class="bg-shape bg-shape-2"></div>
 
     <header>
-      <nav class="navbar">
-        <div class="logo">
-          <div class="logo-icon"></div>
-          Elanco
-        </div>
-        <div class="nav-links">
-          <a href="{{ url_for('default') }}">Home</a>
-          <a href="#about">About</a>
-          <a href="#services">Services</a>
-          <a href="{{ url_for('analysis') }}">Analysis</a>
-          <a href="#contact">Contact</a>
-          <div class="user-profile">
-            <div class="user-avatar" id="user-avatar">
-              <span>JD</span>
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                Elanco
             </div>
-            <div class="dropdown-menu" id="dropdown-menu">
-              <div class="dropdown-header">
-                <p>John Doe</p>
-                <p class="user-email">john.doe@example.com</p>
-              </div>
-              <div class="dropdown-divider"></div>
-              <a href="#profile">My Profile</a>
-              <a href="#history">Analysis History</a>
-              <a href="#settings">Settings</a>
-              <div class="dropdown-divider"></div>
-              <a href="{{ url_for('login') }}" class="logout-link">Sign Out</a>
+            <button class="mobile-menu-button" id="mobile-menu-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="{{ url_for('default') }}">Home</a>
+                <a href="{{ url_for('pets') }}">My Pets</a>
+                <a href="#analysis">AI Analysis</a>
+                <a href="{{ url_for('petliveactivity') }}">Live Activity</a>
+                <a href="{{ url_for('petpageanalysis') }}">Pet Analytics</a>
+                <a href="#history">History</a>
+                <a href="#vets">Find Vet</a>
+                <div class="user-profile">
+                    <div class="user-avatar" id="user-avatar">
+                        <span>JD</span>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu">
+                        <div class="dropdown-header">
+                            <p>John Doe</p>
+                            <p class="user-email">john.doe@example.com</p>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#profile">My Profile</a>
+                        <a href="{{ url_for('pets') }}">My Pets</a>
+                        <a href="{{ url_for('petpageanalysis') }}">Pet Analytics</a>
+                        <a href="#settings">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ url_for('login') }}" class="logout-link">Sign Out</a>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </nav>
+        </nav>
     </header>
 
     <main>
-      <section class="hero">
-        <div class="badge">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"
-            />
-          </svg>
-          #1 AI ANIMAL BEHAVIOR PLATFORM
-        </div>
-
-        <h1>Welcome back, <span>John</span>!</h1>
-        <p>
-          Upload a new image to analyze animal behavior or view your previous
-          analyses
-        </p>
-
-        <div class="upload-container">
-          <form
-            id="upload-form"
-            action="/analysis"
-            enctype="multipart/form-data"
-          >
-            <div class="upload-area" id="upload-area">
-              <div class="upload-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"
-                  />
-                  <path
-                    d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"
-                  />
+        <section class="hero">
+            <div class="badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
                 </svg>
-              </div>
-              <p>
-                <strong>Drag and drop your image here</strong><br />or click to
-                browse
-              </p>
-              <input
-                type="file"
-                id="file-input"
-                name="file"
-                accept="image/*"
-                style="display: none"
-              />
+                #1 PET BEHAVIOR ANALYSIS
             </div>
-            <button type="submit" class="cta-button" style="width: 100%">
-              Analyze Image
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
-                />
-              </svg>
-            </button>
-          </form>
+            
+            <h1>Welcome back, <span>John</span>!</h1>
+            <p>Monitor your pet's behavior and get instant insights</p>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="quick-action-button" onclick="document.getElementById('file-input').click()">
+                    <div class="quick-action-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                        </svg>
+                    </div>
+                    <span class="quick-action-label">New Analysis</span>
+                </button>
+                <button class="quick-action-button" onclick="navigateToPetProfile()">
+                    <div class="quick-action-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM4.5 7.5a.5.5 0 0 1 0-1h5.793L8.146 4.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 7.5H4.5z"/>
+                        </svg>
+                    </div>
+                    <span class="quick-action-label">My Pets</span>
+                </button>
+            </div>
 
-          <div id="image-preview-container" style="display: none">
-            <img id="image-preview" alt="Preview" />
-          </div>
-        </div>
+            <div class="upload-container">
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                            </svg>
+                        </div>
+                        <p><strong>Upload a photo of your pet</strong><br>or take a new picture</p>
+                        <input type="file" id="file-input" name="file" accept="image/*" style="display: none;">
+                    </div>
+                    <button type="submit" class="cta-button" style="width: 100%;">
+                        Analyze Behavior
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </button>
+                </form>
 
-        <div id="result" class="result-container" style="display: none">
-          <div id="loading" style="display: none">
-            <p>Analyzing image...</p>
-            <div class="progress-bar-container">
-              <div class="progress-bar"></div>
+                <div id="image-preview-container" style="display: none;">
+                    <img id="image-preview" alt="Preview">
+                </div>
             </div>
-          </div>
-          <div id="predictions-list"></div>
-        </div>
-      </section>
 
-      <section class="recent-analyses">
-        <h2>Your Recent Analyses</h2>
-        <div class="analyses-grid">
-          <div class="analysis-card">
-            <div class="analysis-image">
-              <img
-                src="{{ url_for('static', filename='images/upload.png') }}"
-                alt="Analysis 1"
-              />
+            <div id="result" class="result-container" style="display: none;">
+                <div id="loading" style="display: none;">
+                    <p>Analyzing pet behavior...</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+                <div id="predictions-list"></div>
             </div>
-            <div class="analysis-details">
-              <h3>Farm Animals Analysis</h3>
-              <p class="analysis-date">June 15, 2023 • 10:23 AM</p>
-              <p>3 animals detected: 2 cows (grazing), 1 horse (running)</p>
-              <a href="#" class="view-details">View Details</a>
-            </div>
-          </div>
-          <div class="analysis-card">
-            <div class="analysis-image">
-              <img
-                src="{{ url_for('static', filename='images/analysis.png') }}"
-                alt="Analysis 2"
-              />
-            </div>
-            <div class="analysis-details">
-              <h3>Pet Behavior Study</h3>
-              <p class="analysis-date">June 10, 2023 • 3:45 PM</p>
-              <p>2 animals detected: 1 dog (playing), 1 cat (sleeping)</p>
-              <a href="#" class="view-details">View Details</a>
-            </div>
-          </div>
-          <div class="analysis-card">
-            <div class="analysis-image">
-              <img
-                src="{{ url_for('static', filename='images/results.png') }}"
-                alt="Analysis 3"
-              />
-            </div>
-            <div class="analysis-details">
-              <h3>Wildlife Observation</h3>
-              <p class="analysis-date">June 5, 2023 • 8:12 AM</p>
-              <p>5 animals detected: 3 deer (grazing), 2 birds (flying)</p>
-              <a href="#" class="view-details">View Details</a>
-            </div>
-          </div>
-        </div>
-        <div class="view-all-container">
-          <a href="#history" class="view-all-link">View All Analyses</a>
-        </div>
-      </section>
+        </section>
 
-      <section class="features">
-        <div class="icon-container">
-          <div class="icon-item">
-            <div class="icon-circle">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"
-                />
-                <path
-                  d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"
-                />
-              </svg>
+        <section class="recent-analyses">
+            <h2>Recent Analyses</h2>
+            <div class="analyses-grid">
+                <div class="analysis-card">
+                    <div class="analysis-image">
+                        <img src="{{ url_for('static', filename='images/dog1.jpg') }}" alt="dog1">
+                    </div>
+                    <div class="analysis-details">
+                        <h3>Playful Behavior</h3>
+                        <p class="analysis-date">Today • 10:23 AM</p>
+                        <p>Max is showing healthy play behavior</p>
+                        <div class="confidence-wrapper">
+                            <div class="confidence-indicator confidence-high">
+                                <span class="confidence-dot"></span>
+                                <span>High Confidence</span>
+                            </div>
+                        </div>
+                        <a href="#" class="view-details">View Details</a>
+                    </div>
+                </div>
+                <div class="analysis-card">
+                    <div class="analysis-image">
+                        <img src="{{ url_for('static', filename='images/dog2.jpg') }}" alt="dog2">
+                    </div>
+                    <div class="analysis-details">
+                        <h3>Resting State</h3>
+                        <p class="analysis-date">Yesterday • 3:45 PM</p>
+                        <p>Max is in a normal resting position</p>
+                        <div class="confidence-wrapper">
+                            <div class="confidence-indicator confidence-high">
+                                <span class="confidence-dot"></span>
+                                <span>High Confidence</span>
+                            </div>
+                        </div>
+                        <a href="#" class="view-details">View Details</a>
+                    </div>
+                </div>
+                <div class="analysis-card">
+                    <div class="analysis-image">
+                        <img src="{{ url_for('static', filename='images/dog3.jpg') }}" alt="dog3">
+                    </div>
+                    <div class="analysis-details">
+                        <h3>Attention Seeking</h3>
+                        <p class="analysis-date">2 days ago • 8:12 AM</p>
+                        <p>Max is showing signs of attention seeking</p>
+                        <div class="confidence-wrapper">
+                            <div class="confidence-indicator confidence-high">
+                                <span class="confidence-dot"></span>
+                                <span>High Confidence</span>
+                            </div>
+                        </div>
+                        <a href="#" class="view-details">View Details</a>
+                    </div>
+                </div>
             </div>
-            <p>Upload</p>
-          </div>
-          <div class="icon-item">
-            <div class="icon-circle">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
-                />
-                <path
-                  d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"
-                />
-                <path
-                  d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"
-                />
-              </svg>
+            <div class="view-all-container">
+                <a href="#history" class="view-all-link">View All Analyses</a>
             </div>
-            <p>Analysis</p>
-          </div>
-          <div class="icon-item">
-            <div class="icon-circle">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
-                />
-              </svg>
-            </div>
-            <p>Results</p>
-          </div>
-        </div>
-      </section>
+        </section>
     </main>
 
     <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h4>Contact Us</h4>
-          <p>Email: contact@example.com</p>
-          <p>Phone: (123) 456-7890</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: support@elanco.com</p>
+                <p>Phone: (123) 456-7890</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+                <a href="#help">Help Center</a>
+            </div>
+            <div class="footer-section">
+                <h4>Pet Care</h4>
+                <a href="#vets">Find a Vet</a>
+                <a href="#tips">Pet Care Tips</a>
+                <a href="#emergency">Emergency Care</a>
+            </div>
         </div>
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#terms">Terms of Service</a>
-          <a href="#help">Help Center</a>
-        </div>
-        <div class="footer-section">
-          <h4>Account</h4>
-          <a href="#profile">My Profile</a>
-          <a href="#history">Analysis History</a>
-          <a href="#settings">Settings</a>
-          <a href="#pet_profile">Pet Profile</a>
-        </div>
-      </div>
     </footer>
 
     <script>
-      const form = document.getElementById("upload-form");
-      const fileInput = document.getElementById("file-input");
-      const uploadArea = document.getElementById("upload-area");
-      const imagePreviewContainer = document.getElementById(
-        "image-preview-container"
-      );
-      const imagePreview = document.getElementById("image-preview");
-      const resultDiv = document.getElementById("result");
-      const loadingDiv = document.getElementById("loading");
-      const predictionsList = document.getElementById("predictions-list");
-      const userAvatar = document.getElementById("user-avatar");
-      const dropdownMenu = document.getElementById("dropdown-menu");
-
-      // Toggle dropdown menu
-      userAvatar.addEventListener("click", () => {
-        dropdownMenu.classList.toggle("show");
-      });
-
-      // Close dropdown when clicking elsewhere
-      window.addEventListener("click", (event) => {
-        if (
-          !event.target.matches(".user-avatar") &&
-          !event.target.closest(".user-avatar")
-        ) {
-          if (dropdownMenu.classList.contains("show")) {
-            dropdownMenu.classList.remove("show");
-          }
+        function navigateToPetProfile() {
+            window.location.href = "{{ url_for('pets') }}";
         }
-      });
+        
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('file-input');
+        const uploadArea = document.getElementById('upload-area');
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+        const imagePreview = document.getElementById('image-preview');
+        const resultDiv = document.getElementById('result');
+        const loadingDiv = document.getElementById('loading');
+        const predictionsList = document.getElementById('predictions-list');
+        const userAvatar = document.getElementById('user-avatar');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const navLinks = document.getElementById('nav-links');
 
-      // Image preview functionality
-      fileInput.addEventListener("change", function (e) {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            imagePreview.src = e.target.result;
-            imagePreviewContainer.style.display = "block";
-          };
-          reader.readAsDataURL(file);
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Toggle dropdown menu
+        userAvatar.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking elsewhere
+        window.addEventListener('click', (event) => {
+            if (!event.target.matches('.user-avatar') && !event.target.closest('.user-avatar')) {
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            }
+        });
+
+        // Image preview functionality
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function getConfidenceLevel(confidence) {
+            if (confidence > 60) return 'high';
+            if (confidence > 35) return 'medium';
+            return 'low';
         }
-      });
 
-      // Drag and drop functionality
-      uploadArea.addEventListener("click", () => {
-        fileInput.click();
-      });
-
-      uploadArea.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        uploadArea.style.borderColor = "#4863E0";
-        uploadArea.style.backgroundColor = "rgba(107, 131, 255, 0.05)";
-      });
-
-      uploadArea.addEventListener("dragleave", () => {
-        uploadArea.style.borderColor = "#CBD5E0";
-        uploadArea.style.backgroundColor = "transparent";
-      });
-
-      uploadArea.addEventListener("drop", (e) => {
-        e.preventDefault();
-        uploadArea.style.borderColor = "#CBD5E0";
-        uploadArea.style.backgroundColor = "transparent";
-
-        if (e.dataTransfer.files.length) {
-          fileInput.files = e.dataTransfer.files;
-          const event = new Event("change");
-          fileInput.dispatchEvent(event);
+        function getConfidenceLabel(confidence) {
+            if (confidence > 60) return 'High Confidence';
+            if (confidence > 35) return 'Medium Confidence';
+            return 'Low Confidence';
         }
-      });
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
-        loadingDiv.style.display = "block";
-        resultDiv.style.display = "block";
-        predictionsList.innerHTML = "";
+        // Drag and drop functionality
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#4863E0';
+            uploadArea.style.backgroundColor = 'rgba(107, 131, 255, 0.05)';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#CBD5E0';
+            uploadArea.style.backgroundColor = 'transparent';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#CBD5E0';
+            uploadArea.style.backgroundColor = 'transparent';
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            }
+        });
 
-        try {
-          const response = await fetch("/analysis", {
-            method: "POST",
-            body: formData,
-          });
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            loadingDiv.style.display = 'block';
+            resultDiv.style.display = 'block';
+            predictionsList.innerHTML = '';
 
-          if (response.status === 429) {
-            predictionsList.innerHTML = `
-                        <div class="error">
-                            Service is busy. Please wait a moment and try again.
+            try {
+                const response = await fetch('/analysis', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.status === 429) {
+                    predictionsList.innerHTML = `
+                        <div class="error-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                            </svg>
+                            <p>Service is busy. Please wait a moment and try again.</p>
                         </div>`;
-            return;
-          }
+                    return;
+                }
 
-          const data = await response.json();
-
-          if (data.error) {
-            predictionsList.innerHTML = `<div class="error">${data.error}</div>`;
-          } else {
-            let resultsHtml = `
+                const data = await response.json();
+                
+                if (data.error) {
+                    predictionsList.innerHTML = `
+                        <div class="error-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                            </svg>
+                            <p>${data.error}</p>
+                        </div>`;
+                } else {
+                    let resultsHtml = `
                         <div class="labeled-image">
-                            <h3>Analyzed Image:</h3>
-                            <img src="data:image/jpeg;base64,${
-                              data.labeled_image
-                            }" alt="Labeled image">
+                            <h3>Analysis Results:</h3>
+                            <img src="data:image/jpeg;base64,${data.labeled_image}" alt="Labeled image">
                         </div>
                         <div class="scene-analysis">
-                            <h3>Scene Analysis:</h3>
-                            <p><strong>Description:</strong> ${
-                              data.scene_analysis.description
-                            }</p>
-                            <p><strong>Objects Detected:</strong> ${data.scene_analysis.objects_detected.join(
-                              ", "
-                            )}</p>
-                            <p><strong>Tags:</strong> ${data.scene_analysis.tags.join(
-                              ", "
-                            )}</p>
+                            <h3>Overall Assessment:</h3>
+                            <p><strong>Description:</strong> ${data.scene_analysis.description}</p>
+                            <p><strong>Detected Animal:</strong> ${data.scene_analysis.objects_detected.join(', ')}</p>
                         </div>
+                        
                         <div class="detected-objects">
-                            <h3>Detected Objects and Behaviors:</h3>
+                            <h3>Behavior Analysis:</h3>
                             <ul>
                     `;
+                    
+                    if (data.labeled_objects.length === 0) {
+                        resultsHtml += `
+                            <div class="error-message">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                                </svg>
+                                <p>No animals were detected in this image. Please try uploading a clearer photo of your pet.</p>
+                            </div>`;
+                    } else {
+                        data.labeled_objects.forEach(obj => {
+                            const confidence = parseFloat(obj.confidence);
+                            const confidenceLevel = getConfidenceLevel(confidence);
+                            const confidenceLabel = getConfidenceLabel(confidence);
 
-            data.labeled_objects.forEach((obj) => {
-              resultsHtml += `
-                            <li>
-                                <strong>${obj.type}</strong>: ${obj.behavior} (${obj.confidence})
-                            </li>
-                        `;
-            });
+                            resultsHtml += `
+                                <li>
+                                    <strong>${obj.type}</strong>: ${obj.behavior}
+                                    <div class="confidence-wrapper">
+                                        <div class="confidence-indicator confidence-${confidenceLevel}">
+                                            <span class="confidence-dot"></span>
+                                            <span>${confidenceLabel}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            `;
+                        });
+                    }
+                    
+                    resultsHtml += '</ul></div>';
 
-            resultsHtml += "</ul></div>";
-            predictionsList.innerHTML = resultsHtml;
-          }
-        } catch (error) {
-          predictionsList.innerHTML =
-            '<div class="error">Error analyzing image. Please try again.</div>';
-        } finally {
-          loadingDiv.style.display = "none";
-        }
-      });
+                    // Add the warning message after the behavior analysis section
+                    resultsHtml += (() => {
+                        // Check if detected animal is not a dog or cat
+                        const detectedAnimals = data.scene_analysis.objects_detected.map(animal => animal.toLowerCase());
+                        const supportedAnimals = ['dog', 'cat', 'puppy', 'kitten'];
+                        const hasUnsupportedAnimal = detectedAnimals.some(animal => 
+                            !supportedAnimals.includes(animal) && 
+                            animal !== 'animal' && 
+                            animal !== '');
+                        
+                        if (hasUnsupportedAnimal) {
+                            return `<div class="warning-message" style="background-color: #FFF4E5; border: 1px solid #FFB74D; border-radius: 4px; padding: 12px 16px; margin: 16px 0; display: flex; align-items: center; gap: 12px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#F57C00" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                </svg>
+                                <div>
+                                    <p style="margin: 0; font-weight: 500; color: #333;">Note: The detected animal might be outside our current behavior analysis capabilities.</p>
+                                    <p style="margin: 4px 0 0; color: #555; font-size: 0.9rem;">Our behavior analysis doesn't seem to be currently optimized for this animal. Results may not be accurate.</p>
+                                    <a href="{{ url_for('request_animal') }}" style="display: inline-block; margin-top: 8px; color: #4863E0; font-weight: 500; text-decoration: none;">Request support for this animal type <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -2px;"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg></a>
+                                </div>
+                            </div>`;
+                        }
+                        return '';
+                    })();
+                    
+                    predictionsList.innerHTML = resultsHtml;
+                }
+            } catch (error) {
+                predictionsList.innerHTML = `
+                    <div class="error-message">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                        </svg>
+                        <p>Error analyzing image. Please try again.</p>
+                    </div>`;
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        });
+
+        // Update recent analyses cards with new confidence indicators
+        document.querySelectorAll('.analysis-card').forEach(card => {
+            const confidenceIndicator = card.querySelector('.confidence-indicator');
+            if (confidenceIndicator) {
+                // Set all to high confidence
+                confidenceIndicator.className = 'confidence-indicator confidence-high';
+                confidenceIndicator.querySelector('span:last-child').textContent = 'High Confidence';
+            }
+        });
     </script>
-  </body>
+</body>
 </html>

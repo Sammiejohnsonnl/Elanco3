@@ -2,13 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Login | Elanco Animal Behavior Analysis</title>
     <link
       rel="stylesheet"
       type="text/css"
       href="{{ url_for('static', filename='styles.css') }}"
     />
+    <style>
+      html,
+      body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+      }
+    </style>
   </head>
   <body>
     <!-- Background shapes -->
@@ -21,6 +32,20 @@
           <div class="logo-icon"></div>
           Elanco
         </div>
+        <button class="mobile-menu-button" id="mobile-menu-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+            />
+          </svg>
+        </button>
         <div class="nav-links">
           <a href="{{ url_for('default') }}">Home</a>
           <a href="#about">About</a>
@@ -128,6 +153,13 @@
 
     <script>
       const form = document.getElementById("login-form");
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const navLinks = document.querySelector(".nav-links");
+
+      // Mobile menu toggle
+      mobileMenuButton.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();

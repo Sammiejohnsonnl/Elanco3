@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Request Animal Support | Elanco Pet Behavior Analysis</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <style>
+      html,
+      body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+      }
+
+      .request-form-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 2.5rem;
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .form-header h1 {
+        font-size: 2.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--dark-text);
+      }
+
+      .form-header p {
+        color: #4a5568;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .form-section {
+        margin-bottom: 2rem;
+      }
+
+      .form-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--dark-text);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+
+      .form-field {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-field label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--dark-text);
+      }
+
+      .form-field input,
+      .form-field select,
+      .form-field textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #cbd5e0;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      .form-field input:focus,
+      .form-field select:focus,
+      .form-field textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(107, 131, 255, 0.2);
+      }
+
+      .form-field select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234A5568' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        padding-right: 2.5rem;
+      }
+
+      .form-field textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .form-field.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .file-upload-container {
+        border: 2px dashed #cbd5e0;
+        border-radius: 8px;
+        padding: 2rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+        background-color: #f7fafc;
+      }
+
+      .file-upload-container:hover {
+        border-color: var(--primary-color);
+        background-color: rgba(107, 131, 255, 0.05);
+      }
+
+      .file-upload-icon {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+      }
+
+      .file-upload-container p {
+        margin: 0;
+        color: #4a5568;
+      }
+
+      .file-upload-container strong {
+        color: var(--dark-text);
+      }
+
+      .file-upload-container input[type="file"] {
+        display: none;
+      }
+
+      .submit-button {
+        display: block;
+        width: 100%;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 2rem;
+      }
+
+      .submit-button:hover {
+        background-color: #3a50c5;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        color: var(--primary-color);
+        text-decoration: none;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+      }
+
+      .back-link svg {
+        margin-right: 0.5rem;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      /* For smaller screens */
+      @media (max-width: 768px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .request-form-container {
+          padding: 1.5rem;
+          margin: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background shapes -->
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+
+    <header>
+      <nav class="navbar">
+        <div class="logo">
+          <div class="logo-icon"></div>
+          Elanco
+        </div>
+        <button class="mobile-menu-button" id="mobile-menu-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+            />
+          </svg>
+        </button>
+        <div class="nav-links">
+          <a href="{{ url_for('default') }}">Home</a>
+          <a href="{{ url_for('analysis') }}">Analysis</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+          <a href="{{ url_for('login') }}" class="login-link">Login</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <div class="request-form-container">
+        <a href="{{ url_for('analysis') }}" class="back-link">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
+            />
+          </svg>
+          Back to Analysis
+        </a>
+
+        <div class="form-header">
+          <h1>Request Animal Support</h1>
+          <p>
+            Help us improve our behavior analysis capabilities by requesting
+            support for additional animal types. Your input is valuable in
+            expanding our service.
+          </p>
+        </div>
+
+        <form id="animal-request-form">
+          <div class="form-section">
+            <h2>Animal Information</h2>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="animal-type">Animal Type*</label>
+                <input
+                  type="text"
+                  id="animal-type"
+                  name="animal-type"
+                  value="Pig"
+                  required
+                />
+              </div>
+              <div class="form-field">
+                <label for="animal-breed">Breed (if applicable)</label>
+                <input type="text" id="animal-breed" name="animal-breed" />
+              </div>
+              <div class="form-field full-width">
+                <label for="behaviors">Key Behaviors to Analyze*</label>
+                <textarea
+                  id="behaviors"
+                  name="behaviors"
+                  placeholder="Please describe the specific behaviors you'd like our system to identify..."
+                  required
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h2>Your Information</h2>
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="name">Full Name*</label>
+                <input type="text" id="name" name="name" required />
+              </div>
+              <div class="form-field">
+                <label for="email">Email Address*</label>
+                <input type="email" id="email" name="email" required />
+              </div>
+              <div class="form-field">
+                <label for="profession">Profession</label>
+                <select id="profession" name="profession">
+                  <option value="">Select an option</option>
+                  <option value="pet-owner">Pet Owner</option>
+                  <option value="veterinarian">Veterinarian</option>
+                  <option value="animal-researcher">Animal Researcher</option>
+                  <option value="farmer">Farmer</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="usage">Primary Usage of Our Service</label>
+                <select id="usage" name="usage">
+                  <option value="">Select an option</option>
+                  <option value="personal">Personal Use</option>
+                  <option value="professional">Professional Practice</option>
+                  <option value="research">Research</option>
+                  <option value="education">Education</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h2>Example Images</h2>
+            <p>
+              Providing example images helps us train our model effectively.
+              Please upload 2-5 images of the animal type.
+            </p>
+
+            <div class="file-upload-container" id="file-upload-area">
+              <div class="file-upload-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"
+                  />
+                  <path
+                    d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"
+                  />
+                </svg>
+              </div>
+              <p>
+                <strong>Drag and drop files here</strong><br />or click to
+                browse your files
+              </p>
+              <input
+                type="file"
+                id="file-input"
+                name="images"
+                accept="image/*"
+                multiple
+              />
+            </div>
+
+            <div id="file-preview" class="form-field" style="display: none">
+              <label>Selected Files:</label>
+              <div
+                id="file-list"
+                style="font-size: 0.9rem; color: #4a5568"
+              ></div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h2>Additional Comments</h2>
+            <div class="form-field">
+              <textarea
+                id="comments"
+                name="comments"
+                placeholder="Please share any additional information that might help us in developing support for this animal type..."
+              ></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-button">Submit Request</button>
+        </form>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <p>Email: support@elanco.com</p>
+          <p>Phone: (123) 456-7890</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Service</a>
+          <a href="#help">Help Center</a>
+        </div>
+        <div class="footer-section">
+          <h4>Pet Care</h4>
+          <a href="#vets">Find a Vet</a>
+          <a href="#tips">Pet Care Tips</a>
+          <a href="#emergency">Emergency Care</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // File upload functionality
+      const fileInput = document.getElementById("file-input");
+      const uploadArea = document.getElementById("file-upload-area");
+      const filePreview = document.getElementById("file-preview");
+      const fileList = document.getElementById("file-list");
+
+      // Drag and drop functionality
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = "#4863E0";
+        uploadArea.style.backgroundColor = "rgba(107, 131, 255, 0.05)";
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.style.borderColor = "#CBD5E0";
+        uploadArea.style.backgroundColor = "#F7FAFC";
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = "#CBD5E0";
+        uploadArea.style.backgroundColor = "#F7FAFC";
+
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          const event = new Event("change");
+          fileInput.dispatchEvent(event);
+        }
+      });
+
+      // File change preview
+      fileInput.addEventListener("change", function (e) {
+        if (this.files.length > 0) {
+          filePreview.style.display = "block";
+          fileList.innerHTML = "";
+
+          for (let i = 0; i < this.files.length; i++) {
+            const file = this.files[i];
+            const fileItem = document.createElement("div");
+            fileItem.style.marginBottom = "8px";
+
+            const fileIcon = document.createElement("span");
+            fileIcon.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: -3px; margin-right: 8px; color: #4863E0;">
+                            <path d="M4 0h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H4z"/>
+                            <path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        </svg>
+                    `;
+
+            fileItem.appendChild(fileIcon);
+            fileItem.appendChild(
+              document.createTextNode(
+                file.name + ` (${(file.size / 1024).toFixed(1)} KB)`
+              )
+            );
+            fileList.appendChild(fileItem);
+          }
+        } else {
+          filePreview.style.display = "none";
+        }
+      });
+
+      // Form submission (mockup only)
+      const form = document.getElementById("animal-request-form");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert(
+          "Thank you for your request! Our team will review it and consider adding support for this animal type in future updates."
+        );
+        // In a real implementation, you would submit the form data to your backend
+        window.location.href = "{{ url_for('analysis') }}";
+      });
+
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const navLinks = document.querySelector(".nav-links");
+
+      // Mobile menu toggle
+      mobileMenuButton.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
+    </script>
+  </body>
+</html>

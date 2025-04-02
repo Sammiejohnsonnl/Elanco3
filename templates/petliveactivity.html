@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Pet Live Activity</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <style>
+      html,
+      body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Background shapes -->
+    <div class="bg-shape bg-shape-1"></div>
+    <div class="bg-shape bg-shape-2"></div>
+
+    <div class="pet-page">
+      <header>
+        <nav class="navbar">
+          <div class="logo">
+            <div class="logo-icon"></div>
+            Elanco
+          </div>
+          <button class="mobile-menu-button" id="mobile-menu-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+              />
+            </svg>
+          </button>
+          <div class="nav-links" id="nav-links">
+            <a href="{{ url_for('default') }}">Home</a>
+            <a href="{{ url_for('pets') }}">My Pets</a>
+            <a href="{{ url_for('analysis') }}">Analysis</a>
+            <a href="{{ url_for('petliveactivity') }}">Live Activity</a>
+            <a href="#contact">Contact</a>
+            <a href="{{ url_for('login') }}" class="login-link">Login</a>
+          </div>
+        </nav>
+      </header>
+
+      <div class="pet-blocks-container-2">
+        <div class="dog-status">
+          <h2 id="dog-status-text">Your dog is currently walking</h2>
+          <img
+            src="{{ url_for('static', filename='images/Bulldog_inglese.jpg') }}"
+            alt="Dog Image"
+            class="dog-image"
+          />
+        </div>
+        <div class="activity-log">
+          <h3>Activity Log</h3>
+          <ul id="activity-list"></ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const statusText = document.getElementById("dog-status-text");
+        const activityList = document.getElementById("activity-list");
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const navLinks = document.getElementById("nav-links");
+
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener("click", () => {
+          navLinks.classList.toggle("active");
+        });
+
+        const activities = [
+          "Your dog ate",
+          "Your dog drank water",
+          "Your dog played outside",
+          "Your dog went for a walk",
+          "Your dog took a nap",
+          "Your dog barked at something",
+          "Your dog slept",
+        ];
+
+        function getRandomTime() {
+          const hour = Math.floor(Math.random() * 12) + 1;
+          const minutes = Math.floor(Math.random() * 60);
+          const ampm = Math.random() > 0.5 ? "AM" : "PM";
+          return `${hour}:${minutes < 10 ? "0" + minutes : minutes} ${ampm}`;
+        }
+
+        function generateActivityLog() {
+          for (let i = 0; i < 20; i++) {
+            const randomActivity =
+              activities[Math.floor(Math.random() * activities.length)];
+            const timestamp = getRandomTime();
+            const listItem = document.createElement("li");
+            listItem.textContent = `${randomActivity} at ${timestamp}`;
+            activityList.appendChild(listItem);
+          }
+        }
+
+        generateActivityLog();
+      });
+    </script>
+  </body>
+</html>
