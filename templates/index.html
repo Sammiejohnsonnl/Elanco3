@@ -1,239 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Animal Behavior Analysis | Powered by Azure Vision AI</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
     <!-- Background shapes -->
     <div class="bg-shape bg-shape-1"></div>
     <div class="bg-shape bg-shape-2"></div>
 
     <header>
-        <nav class="navbar">
-            <div class="logo">
-                <div class="logo-icon"></div>
-                Elanco
-            </div>
-            <div class="nav-links">
-                <a href="{{ url_for('default') }}">Home</a>
-                <a href="#about">About</a>
-                <a href="#services">Services</a>
-                <a href="{{ url_for('index') }}">Analysis</a>
-                <a href="#contact">Contact</a>
-                <a href="{{ url_for('login') }}" class="login-link">Login</a>
-            </div>
-        </nav>
+      <nav class="navbar">
+        <div class="logo">
+          <div class="logo-icon"></div>
+          Elanco
+        </div>
+        <div class="nav-links">
+          <a href="{{ url_for('default') }}">Home</a>
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="{{ url_for('analysis') }}">Analysis</a>
+          <a href="#contact">Contact</a>
+          <a href="{{ url_for('login') }}" class="login-link">Login</a>
+        </div>
+      </nav>
     </header>
 
     <main>
-        <section class="hero">
-            <div class="badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+      <section class="hero">
+        <div class="badge">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"
+            />
+          </svg>
+          #1 AI ANIMAL BEHAVIOR PLATFORM
+        </div>
+
+        <h1>Animal <span>Behavior</span> Analysis</h1>
+        <p>
+          Advanced AI-powered analysis to understand and categorize animal
+          behavior
+        </p>
+
+        <div class="upload-container">
+          <form
+            id="upload-form"
+            action="/analysis"
+            enctype="multipart/form-data"
+          >
+            <div class="upload-area" id="upload-area">
+              <div class="upload-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"
+                  />
+                  <path
+                    d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"
+                  />
                 </svg>
-                #1 AI ANIMAL BEHAVIOR PLATFORM
+              </div>
+              <p>
+                <strong>Drag and drop your image here</strong><br />or click to
+                browse
+              </p>
+              <input
+                type="file"
+                id="file-input"
+                name="file"
+                accept="image/*"
+                style="display: none"
+              />
             </div>
-            
-            <h1>Animal <span>Behavior</span> Analysis</h1>
-            <p>Advanced AI-powered analysis to understand and categorize animal behavior</p>
-            
-            <div class="upload-container">
-                <form id="upload-form" enctype="multipart/form-data">
-                    <div class="upload-area" id="upload-area">
-                        <div class="upload-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                            </svg>
-                        </div>
-                        <p><strong>Drag and drop your image here</strong><br>or click to browse</p>
-                        <input type="file" id="file-input" name="file" accept="image/*" style="display: none;">
-                    </div>
-                    <button type="submit" class="cta-button" style="width: 100%;">
-                        Analyze Image
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                    </button>
-                </form>
+            <button type="submit" class="cta-button" style="width: 100%">
+              Analyze Image
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                />
+              </svg>
+            </button>
+          </form>
 
-                <div id="image-preview-container" style="display: none;">
-                    <img id="image-preview" alt="Preview">
-                </div>
-            </div>
+          <div id="image-preview-container" style="display: none">
+            <img id="image-preview" alt="Preview" />
+          </div>
+        </div>
 
-            <div id="result" class="result-container" style="display: none;">
-                <div id="loading" style="display: none;">
-                    <p>Analyzing image...</p>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar"></div>
-                    </div>
-                </div>
-                <div id="predictions-list"></div>
+        <div id="result" class="result-container" style="display: none">
+          <div id="loading" style="display: none">
+            <p>Analyzing image...</p>
+            <div class="progress-bar-container">
+              <div class="progress-bar"></div>
             </div>
-        </section>
+          </div>
+          <div id="predictions-list"></div>
+        </div>
+      </section>
 
-        <section class="features">
-            <div class="icon-container">
-                <div class="icon-item">
-                    <div class="icon-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                            <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                        </svg>
-                    </div>
-                    <p>Upload</p>
-                </div>
-                <div class="icon-item">
-                    <div class="icon-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
-                            <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
-                            <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
-                        </svg>
-                    </div>
-                    <p>Analysis</p>
-                </div>
-                <div class="icon-item">
-                    <div class="icon-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                        </svg>
-                    </div>
-                    <p>Results</p>
-                </div>
+      <section class="features">
+        <div class="icon-container">
+          <div class="icon-item">
+            <div class="icon-circle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"
+                />
+                <path
+                  d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"
+                />
+              </svg>
             </div>
-        </section>
+            <p>Upload</p>
+          </div>
+          <div class="icon-item">
+            <div class="icon-circle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"
+                />
+                <path
+                  d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"
+                />
+                <path
+                  d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"
+                />
+              </svg>
+            </div>
+            <p>Analysis</p>
+          </div>
+          <div class="icon-item">
+            <div class="icon-circle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+                />
+              </svg>
+            </div>
+            <p>Results</p>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Contact Us</h4>
-                <p>Email: contact@example.com</p>
-                <p>Phone: (123) 456-7890</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <a href="#privacy">Privacy Policy</a>
-                <a href="#terms">Terms of Service</a>
-            </div>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <p>Email: contact@example.com</p>
+          <p>Phone: (123) 456-7890</p>
         </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Service</a>
+        </div>
+      </div>
     </footer>
 
     <script>
-        const form = document.getElementById('upload-form');
-        const fileInput = document.getElementById('file-input');
-        const uploadArea = document.getElementById('upload-area');
-        const imagePreviewContainer = document.getElementById('image-preview-container');
-        const imagePreview = document.getElementById('image-preview');
-        const resultDiv = document.getElementById('result');
-        const loadingDiv = document.getElementById('loading');
-        const predictionsList = document.getElementById('predictions-list');
+      const form = document.getElementById("upload-form");
+      const fileInput = document.getElementById("file-input");
+      const uploadArea = document.getElementById("upload-area");
+      const imagePreviewContainer = document.getElementById(
+        "image-preview-container"
+      );
+      const imagePreview = document.getElementById("image-preview");
+      const resultDiv = document.getElementById("result");
+      const loadingDiv = document.getElementById("loading");
+      const predictionsList = document.getElementById("predictions-list");
 
-        // Image preview functionality
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    imagePreviewContainer.style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            }
-        });
+      // Image preview functionality
+      fileInput.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            imagePreviewContainer.style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        }
+      });
 
-        // Drag and drop functionality
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
-        
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#4863E0';
-            uploadArea.style.backgroundColor = 'rgba(107, 131, 255, 0.05)';
-        });
-        
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.style.borderColor = '#CBD5E0';
-            uploadArea.style.backgroundColor = 'transparent';
-        });
-        
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.style.borderColor = '#CBD5E0';
-            uploadArea.style.backgroundColor = 'transparent';
-            
-            if (e.dataTransfer.files.length) {
-                fileInput.files = e.dataTransfer.files;
-                const event = new Event('change');
-                fileInput.dispatchEvent(event);
-            }
-        });
+      // Drag and drop functionality
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
-            loadingDiv.style.display = 'block';
-            resultDiv.style.display = 'block';
-            predictionsList.innerHTML = '';
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = "#4863E0";
+        uploadArea.style.backgroundColor = "rgba(107, 131, 255, 0.05)";
+      });
 
-            try {
-                const response = await fetch('/analysis', {
-                    method: 'POST',
-                    body: formData
-                });
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.style.borderColor = "#CBD5E0";
+        uploadArea.style.backgroundColor = "transparent";
+      });
 
-                if (response.status === 429) {
-                    predictionsList.innerHTML = `
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = "#CBD5E0";
+        uploadArea.style.backgroundColor = "transparent";
+
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          const event = new Event("change");
+          fileInput.dispatchEvent(event);
+        }
+      });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        loadingDiv.style.display = "block";
+        resultDiv.style.display = "block";
+        predictionsList.innerHTML = "";
+
+        try {
+          const response = await fetch("/analysis", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (response.status === 429) {
+            predictionsList.innerHTML = `
                         <div class="error">
                             Service is busy. Please wait a moment and try again.
                         </div>`;
-                    return;
-                }
+            return;
+          }
 
-                const data = await response.json();
-                
-                if (data.error) {
-                    predictionsList.innerHTML = `<div class="error">${data.error}</div>`;
-                } else {
-                    let resultsHtml = `
+          const data = await response.json();
+
+          if (data.error) {
+            predictionsList.innerHTML = `<div class="error">${data.error}</div>`;
+          } else {
+            let resultsHtml = `
                         <div class="labeled-image">
                             <h3>Analyzed Image:</h3>
-                            <img src="data:image/jpeg;base64,${data.labeled_image}" alt="Labeled image">
+                            <img src="data:image/jpeg;base64,${
+                              data.labeled_image
+                            }" alt="Labeled image">
                         </div>
                         <div class="scene-analysis">
                             <h3>Scene Analysis:</h3>
-                            <p><strong>Description:</strong> ${data.scene_analysis.description}</p>
-                            <p><strong>Objects Detected:</strong> ${data.scene_analysis.objects_detected.join(', ')}</p>
-                            <p><strong>Tags:</strong> ${data.scene_analysis.tags.join(', ')}</p>
+                            <p><strong>Description:</strong> ${
+                              data.scene_analysis.description
+                            }</p>
+                            <p><strong>Objects Detected:</strong> ${data.scene_analysis.objects_detected.join(
+                              ", "
+                            )}</p>
+                            <p><strong>Tags:</strong> ${data.scene_analysis.tags.join(
+                              ", "
+                            )}</p>
                         </div>
                         <div class="detected-objects">
                             <h3>Detected Objects and Behaviors:</h3>
                             <ul>
                     `;
-                    
-                    data.labeled_objects.forEach(obj => {
-                        resultsHtml += `
+
+            data.labeled_objects.forEach((obj) => {
+              resultsHtml += `
                             <li>
                                 <strong>${obj.type}</strong>: ${obj.behavior} (${obj.confidence})
                             </li>
                         `;
-                    });
-                    
-                    resultsHtml += '</ul></div>';
-                    predictionsList.innerHTML = resultsHtml;
-                }
-            } catch (error) {
-                predictionsList.innerHTML = '<div class="error">Error analyzing image. Please try again.</div>';
-            } finally {
-                loadingDiv.style.display = 'none';
-            }
-        });
+            });
+
+            resultsHtml += "</ul></div>";
+            predictionsList.innerHTML = resultsHtml;
+          }
+        } catch (error) {
+          predictionsList.innerHTML =
+            '<div class="error">Error analyzing image. Please try again.</div>';
+        } finally {
+          loadingDiv.style.display = "none";
+        }
+      });
     </script>
-</body>
+  </body>
 </html>

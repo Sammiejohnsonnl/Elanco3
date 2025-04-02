@@ -23,7 +23,7 @@
                     <a href="{{ url_for('default') }}">Home</a>
                     <a href="#about">About</a>
                     <a href="#services">Services</a>
-                    <a href="{{ url_for('index') }}">Analysis</a>
+                    <a href="{{ url_for('analysis') }}">Analysis</a>
                     <a href="#contact">Contact</a>
                     <a href="{{ url_for('login') }}" class="login-link">Login</a>
                     <a href="{{ url_for('default') }}" class="cta-button">Back to Home</a>
@@ -36,17 +36,20 @@
             <center>
                 <h1>Pet Profile</h1>
             <p>Your Pets</p>
+            <button class="cta-button"
+                                onclick="document.getElementById('pet-modal').style.display='block';">
+                            Add Another Pet
+                        </button>
             </center>
+
+            
 
             <section class="hero">
                 <div class="badge">
 
                     {% if pets %}
                     <div id="pets-container">
-                        <button class="cta-button"
-                                onclick="document.getElementById('pet-modal').style.display='block';">
-                            Add Another Pet
-                        </button>
+                        
                         <div class="pets-list">
                             {% for pet in pets %}
                             <div class="pet-card">

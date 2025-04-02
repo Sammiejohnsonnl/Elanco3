@@ -1,112 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login | Elanco Animal Behavior Analysis</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
     <!-- Background shapes -->
     <div class="bg-shape bg-shape-1"></div>
     <div class="bg-shape bg-shape-2"></div>
 
     <header>
-        <nav class="navbar">
-            <div class="logo">
-                <div class="logo-icon"></div>
-                Elanco
-            </div>
-            <div class="nav-links">
-                <a href="{{ url_for('default') }}">Home</a>
-                <a href="#about">About</a>
-                <a href="#services">Services</a>
-                <a href="{{ url_for('index') }}">Analysis</a>
-                <a href="#contact">Contact</a>
-            </div>
-        </nav>
+      <nav class="navbar">
+        <div class="logo">
+          <div class="logo-icon"></div>
+          Elanco
+        </div>
+        <div class="nav-links">
+          <a href="{{ url_for('default') }}">Home</a>
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="{{ url_for('analysis') }}">Analysis</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
     </header>
 
     <main>
-        <section class="hero">
-            <div class="badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                </svg>
-                SECURE ACCESS
+      <section class="hero">
+        <div class="badge">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"
+            />
+          </svg>
+          SECURE ACCESS
+        </div>
+
+        <h1>User <span>Login</span></h1>
+        <p>Sign in to access your Elanco Animal Behavior Analysis account</p>
+
+        <div class="upload-container">
+          <form id="login-form">
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email address"
+                required
+              />
             </div>
-            
-            <h1>User <span>Login</span></h1>
-            <p>Sign in to access your Elanco Animal Behavior Analysis account</p>
-            
-            <div class="upload-container">
-                <form id="login-form">
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                    </div>
-                    <div class="form-options">
-                        <div class="remember-me">
-                            <input type="checkbox" id="remember" name="remember">
-                            <label for="remember">Remember me</label>
-                        </div>
-                        <a href="#" class="forgot-password">Forgot password?</a>
-                    </div>
-                    <button type="submit" class="cta-button" style="width: 100%;">
-                        Sign In
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                    </button>
-                </form>
-                
-                <div class="login-footer">
-                    <p>Don't have an account? <a href="#" class="signup-link">Sign up</a></p>
-                </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+              />
             </div>
-        </section>
+            <div class="form-options">
+              <div class="remember-me">
+                <input type="checkbox" id="remember" name="remember" />
+                <label for="remember">Remember me</label>
+              </div>
+              <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+            <button type="submit" class="cta-button" style="width: 100%">
+              Sign In
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                />
+              </svg>
+            </button>
+          </form>
+
+          <div class="login-footer">
+            <p>
+              Don't have an account? <a href="#" class="signup-link">Sign up</a>
+            </p>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Contact Us</h4>
-                <p>Email: contact@example.com</p>
-                <p>Phone: (123) 456-7890</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <a href="#privacy">Privacy Policy</a>
-                <a href="#terms">Terms of Service</a>
-            </div>
-            <div class="footer-section">
-                <h4>About</h4>
-                <p>Powered by Azure Vision AI</p>
-                <p>© 2023 Elanco. All rights reserved.</p>
-            </div>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Contact Us</h4>
+          <p>Email: contact@example.com</p>
+          <p>Phone: (123) 456-7890</p>
         </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Service</a>
+        </div>
+        <div class="footer-section">
+          <h4>About</h4>
+          <p>Powered by Azure Vision AI</p>
+          <p>© 2023 Elanco. All rights reserved.</p>
+        </div>
+      </div>
     </footer>
 
     <script>
-        const form = document.getElementById('login-form');
-        
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Simulate login success - in a real app, this would make an API call
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // Just a simple validation for demo
-            if (email && password) {
-                // Redirect to dashboard after "login"
-                window.location.href = "{{ url_for('dashboard') }}";
-            }
-        });
+      const form = document.getElementById("login-form");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Simulate login success - in a real app, this would make an API call
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // Just a simple validation for demo
+        if (email && password) {
+          // Redirect to dashboard after "login"
+          window.location.href = "{{ url_for('dashboard') }}";
+        }
+      });
     </script>
-</body>
-</html> 
+  </body>
+</html>

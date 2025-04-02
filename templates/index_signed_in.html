@@ -25,7 +25,7 @@
           <a href="{{ url_for('default') }}">Home</a>
           <a href="#about">About</a>
           <a href="#services">Services</a>
-          <a href="{{ url_for('index') }}">Analysis</a>
+          <a href="{{ url_for('analysis') }}">Analysis</a>
           <a href="#contact">Contact</a>
           <div class="user-profile">
             <div class="user-avatar" id="user-avatar">
@@ -72,7 +72,11 @@
         </p>
 
         <div class="upload-container">
-          <form id="upload-form" enctype="multipart/form-data">
+          <form
+            id="upload-form"
+            action="/analysis"
+            enctype="multipart/form-data"
+          >
             <div class="upload-area" id="upload-area">
               <div class="upload-icon">
                 <svg

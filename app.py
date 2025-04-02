@@ -106,29 +106,38 @@ def expand_bounding_box(box, image_width, image_height, expansion_factor=0.2):
     return (int(new_x), int(new_y), int(new_w), int(new_h))
 
 @app.route('/analysis', methods=['GET', 'POST'])
-def index():
+def analysis():
     if request.method == 'POST':
-        if 'file' not in request.files:
-            return jsonify({'error': 'No file uploaded'}), 400
-        
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify({'error': 'No file selected'}), 400
-
         try:
+            # Validate file upload
+            if 'file' not in request.files or request.files['file'].filename.strip() == '':
+                return jsonify({'error': 'No file uploaded or selected'}), 400
+
+            file = request.files['file']
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             file.save(filepath)
+            print(f"File saved successfully at {filepath}")
 
-            # Reads the image file once
-            with open(filepath, 'rb') as image_file:
-                image_content = image_file.read()
+            # Verify the image file
+            try:
+                image = Image.open(filepath)
+                image.verify()  # Ensure the uploaded file is a valid image
+                image.close()
+                print(f"Image verified: {filepath}")
+            except Exception as e:
+                print(f"Invalid image file: {e}")
+                return jsonify({'error': 'Invalid image file'}), 400
 
-            max_retries = 5 
-            base_delay = 2
+            # Read the image content
+            with open(filepath, 'rb') as img_file:
+                image_content = img_file.read()
 
-            # Function to handle API calls with retries
+            # Retry logic for API calls
             def make_api_call(func, *args, **kwargs):
+                max_retries = 5
+                base_delay = 2
                 last_error = None
+
                 for attempt in range(max_retries):
                     try:
                         return func(*args, **kwargs)
@@ -136,7 +145,7 @@ def index():
                         last_error = e
                         if e.status_code == 429:  # Too Many Requests
                             if attempt < max_retries - 1:
-                                wait_time = base_delay * (2 ** attempt)  # Exponential backoff
+                                wait_time = base_delay * (2 ** attempt)
                                 print(f"Rate limited. Waiting {wait_time} seconds before retry {attempt + 1}")
                                 sleep(wait_time)
                                 continue
@@ -148,134 +157,84 @@ def index():
                             continue
                         raise
                 
-                # If we have used all the retries
+                # If all retries fail
                 if last_error:
-                    if isinstance(last_error, HttpResponseError) and last_error.status_code == 429:
-                        return jsonify({'error': 'Service is currently busy. Please try again in a few minutes.'}), 429
                     raise last_error
 
-            # Sequence the API calls with delays between them due to error with multiple animals requesting too much
+            # Start animal detection (using mock results for testing)
             print("Starting animal detection...")
-            animal_results = make_api_call(
-                animal_predictor.classify_image,
-                ANIMAL_PROJECT_ID,
-                ANIMAL_ITERATION_NAME,
-                image_content
-            )
-            sleep(1)  # Add delay between API calls
+            try:
+                animal_results = make_api_call(
+                    animal_predictor.classify_image,
+                    ANIMAL_PROJECT_ID,
+                    ANIMAL_ITERATION_NAME,
+                    image_content
+                )
+            except Exception as e:
+                print(f"Error in animal detection: {e}")
+                return jsonify({'error': 'Animal detection failed'}), 500
 
             print("Starting computer vision analysis...")
-            computer_vision_analysis = make_api_call(
-                computer_vision_client.analyze_image_in_stream,
-                io.BytesIO(image_content),
-                visual_features=['Objects', 'Tags', 'Description']
-            )
-            sleep(1)  # Add delay between API calls
+            try:
+                computer_vision_analysis = make_api_call(
+                    computer_vision_client.analyze_image_in_stream,
+                    io.BytesIO(image_content),
+                    visual_features=['Objects', 'Tags', 'Description']
+                )
+            except Exception as e:
+                print(f"Error in computer vision analysis: {e}")
+                return jsonify({'error': 'Computer vision analysis failed'}), 500
 
-            # Get the most confident animal prediction
+            # Process animal predictions
             animal_predictions = sorted(
                 animal_results.predictions,
                 key=lambda x: x.probability,
                 reverse=True
             )
-            
-            # Use specific animal type from custom vision api rather than use computer vision unless not trained
+
             animal_type = "unknown"
-            animal_confidence = 0
             if animal_predictions and animal_predictions[0].probability > 0.5:
                 animal_type = animal_predictions[0].tag_name
-                animal_confidence = animal_predictions[0].probability
 
-            # Added rate limiting control
-            MAX_OBJECTS = 20  # Maximum number of objects to analyze
-            BATCH_SIZE = 3    # Number of objects to analyze at once
-            
+            # Analyze objects using Computer Vision
             image = Image.open(filepath)
-            image_width, image_height = image.size
             draw = ImageDraw.Draw(image)
-            
             labeled_objects = []
+
             if hasattr(computer_vision_analysis, 'objects'):
-                # Limit the number of objects to analyze
-                objects = computer_vision_analysis.objects[:MAX_OBJECTS]
-                
-                # Process objects in batches
-                for i in range(0, len(objects), BATCH_SIZE):
-                    batch = objects[i:i + BATCH_SIZE]
-                    
-                    # Add delay between batches
-                    if i > 0:
-                        sleep(1)
-                    
-                    for obj in batch:
-                        # Expanding the bounding box due to previous issues with boxes cutting off things
-                        left, top, width, height = expand_bounding_box(
-                            obj.rectangle,
-                            image_width,
-                            image_height
-                        )
+                objects = computer_vision_analysis.objects[:20]  # Limit to 20 objects
+                for obj in objects:
+                    left, top, width, height = expand_bounding_box(
+                        obj.rectangle, image.width, image.height
+                    )
+                    draw.rectangle([left, top, left + width, top + height], outline='red', width=2)
+                    label = f"{animal_type} ({obj.object_property})"
+                    draw.text((left, top - 10), label, fill='red')
 
-                        # Analyze behavior with expanded box
-                        object_image = image.crop((left, top, left + width, top + height))
-                        object_bytes = io.BytesIO()
-                        object_image.save(object_bytes, format='JPEG')
-                        object_bytes.seek(0)
+                    labeled_objects.append({
+                        'type': obj.object_property,
+                        'location': {'x': left, 'y': top, 'width': width, 'height': height}
+                    })
 
-                        try:
-                            # Get behavior prediction
-                            behavior_results = behavior_predictor.classify_image(
-                                BEHAVIOR_PROJECT_ID,
-                                BEHAVIOR_ITERATION_NAME,
-                                object_bytes.read()
-                            )
-
-                            top_behavior = max(behavior_results.predictions, 
-                                             key=lambda x: x.probability)
-
-                        
-                            object_label = animal_type if obj.object_property.lower() == 'mammal' else obj.object_property
-
-                            # Draw the expanded bounding box
-                            draw.rectangle([left, top, left + width, top + height], 
-                                         outline='red', width=3)
-                            label = f"{object_label}: {top_behavior.tag_name} ({top_behavior.probability:.0%})"
-                            draw.text((left, top - 20), label, fill='red')
-
-                            labeled_objects.append({
-                                'type': object_label,
-                                'behavior': top_behavior.tag_name,
-                                'confidence': f"{top_behavior.probability * 100:.2f}%",
-                                'location': {'x': left, 'y': top, 'width': width, 'height': height}
-                            })
-
-                        except Exception as e:
-                            print(f"Error processing object: {str(e)}")
-                            continue
-
-            # Save the labeled image
+            # Save labeled image
             labeled_image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'labeled_' + file.filename)
             image.save(labeled_image_path)
 
             # Get scene analysis data
             scene_description = ""
-            if hasattr(computer_vision_analysis, 'description'):
-                scene_description = computer_vision_analysis.description.captions[0].text if computer_vision_analysis.description.captions else ""
+            if hasattr(computer_vision_analysis, 'description') and computer_vision_analysis.description.captions:
+                scene_description = computer_vision_analysis.description.captions[0].text
 
-            scene_objects = []
-            if hasattr(computer_vision_analysis, 'objects'):
-                scene_objects = [obj.object_property for obj in computer_vision_analysis.objects]
+            scene_objects = [obj.object_property for obj in computer_vision_analysis.objects]
+            scene_tags = [tag.name for tag in computer_vision_analysis.tags if tag.confidence > 0.5]
 
-            scene_tags = []
-            if hasattr(computer_vision_analysis, 'tags'):
-                scene_tags = [tag.name for tag in computer_vision_analysis.tags if tag.confidence > 0.5]
-
-            # Convert images to base64
+            # Encode images to Base64
             with open(filepath, 'rb') as img_file:
                 original_image = base64.b64encode(img_file.read()).decode('utf-8')
-
             with open(labeled_image_path, 'rb') as img_file:
                 labeled_image = base64.b64encode(img_file.read()).decode('utf-8')
 
+            # Return JSON response
             return jsonify({
                 'original_image': original_image,
                 'labeled_image': labeled_image,
@@ -288,14 +247,15 @@ def index():
             })
 
         except HttpResponseError as e:
+            print(f"HttpResponseError: {e}")
             if e.status_code == 429:
-                return jsonify({
-                    'error': 'The service is experiencing high demand. Please wait a moment and try again.'
-                }), 429
+                return jsonify({'error': 'Service is busy. Try again later.'}), 429
             return jsonify({'error': f'Service error: {str(e)}'}), e.status_code
         except Exception as e:
-            return jsonify({'error': f'An error occurred: {str(e)}'}), 500
+            print(f"Unexpected error: {e}")
+            return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
 
+    # GET request: Render the analysis page
     return render_template('index.html')
 
 @app.route('/home')
@@ -322,57 +282,72 @@ def dashboard():
 @app.route('/pets', methods=['GET', 'POST'])
 def pets():
     if request.method == 'POST':
-        # Handles form submission
-        pet_id = request.form.get('pet_id')  # Hidden field for edit functionality
+        # Validate required fields
+        if not request.form.get('pet_name') or not request.form.get('animal'):
+            return jsonify({'error': 'Missing required fields: pet_name and/or animal_type'}), 400
+
+        # Get pet ID for edit functionality
+        pet_id = request.form.get('pet_id')
+
+        # Prepare pet data
         pet_data = {
-            "name": request.form['pet_name'],
-            "animal_type": request.form['animal'],
+            "name": request.form.get('pet_name'),
+            "animal_type": request.form.get('animal'),
             "breed": request.form.get('breed'),
-            "age": request.form.get('age'),
-            "height": request.form.get('height'),
-            "weight": request.form.get('weight'),
+            "age": request.form.get('age', type=int),
+            "height": request.form.get('height', type=float),
+            "weight": request.form.get('weight', type=float),
             "last_vet_visit": request.form.get('last_vet_visit'),
-            "image": None,
+            "image": None,  # Placeholder for image path
         }
-        
+
         # Handle image upload
-        if 'image' in request.files and request.files['image'].filename != '':
+        if 'image' in request.files and request.files['image'].filename.strip() != '':
             image_file = request.files['image']
             image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_file.filename)
             image_file.save(image_path)
             pet_data['image'] = image_path
-        else:
-            # If no new image is uploaded, retain the current image
-            if pet_id:
-                pet = Pet.query.get(pet_id)
-                if pet:
-                    pet_data['image'] = pet.image
-
-        # Edit existing pet or add new pet
-        if pet_id:
+        elif pet_id:  # Retain current image if editing and no new image uploaded
             pet = Pet.query.get(pet_id)
             if pet:
-                for key, value in pet_data.items():
-                    setattr(pet, key, value)
-        else:
-            new_pet = Pet(**pet_data)
-            db.session.add(new_pet)
+                pet_data['image'] = pet.image
 
-        db.session.commit()
-        flash('Pet details saved successfully!')
-        return redirect(url_for('pets'))
-    
+        try:
+            if pet_id:  # Edit an existing pet
+                pet = Pet.query.get(pet_id)
+                if pet:
+                    for key, value in pet_data.items():
+                        if value is not None:  # Only update fields with values
+                            setattr(pet, key, value)
+                else:
+                    return jsonify({'error': 'Pet not found'}), 404
+            else:  # Add a new pet
+                new_pet = Pet(**pet_data)
+                db.session.add(new_pet)
+
+            db.session.commit()
+            flash('Pet details saved successfully!')
+            return redirect(url_for('pets'))
+
+        except Exception as e:
+            print(f"Error while processing pet data: {e}")
+            return jsonify({'error': 'An unexpected error occurred while saving pet details'}), 500
+
     # Fetch all pets for display
     all_pets = Pet.query.all()
     return render_template('pet_profile.html', pets=all_pets)
 
-@app.route('/delete-pet/<int:id>', methods=['GET', 'POST'])
+
+@app.route('/delete-pet/<int:id>', methods=['POST'])
 def delete_pet(id):
+    # Handles deleting a pet profile by ID
     pet = Pet.query.get(id)
     if pet:
         db.session.delete(pet)
         db.session.commit()
         flash('Pet profile deleted successfully!')
+    else:
+        flash('Pet not found!')
     return redirect(url_for('pets'))
 
 
