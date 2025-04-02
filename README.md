@@ -53,8 +53,9 @@ Follow these steps to set up and run the app locally:
 ### **3. Install Dependencies**
 
 - Install the required Python packages:
-##
+
       pip install -r requirements.txt
+##
 
 ### **4. Add Environment Variables**
 
