@@ -28,8 +28,8 @@ Follow these steps to set up and run the app locally:
 ### **1. Clone the Repository**
 
 - Open your PowerShell terminal and execute:
-
-git clone https://github.com/Sammiejohnsonnl/Elanco3.git
+##
+<tab><tab>git clone https://github.com/Sammiejohnsonnl/Elanco3.git
 
 - Navigate to the project folder and switch to the "azureAIPrototype" branch:
 
