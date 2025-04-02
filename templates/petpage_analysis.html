@@ -1,92 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Pet Analysis Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
     <style>
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-            position: relative;
-        }
+      html,
+      body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <!-- Background shapes -->
     <div class="bg-shape bg-shape-1"></div>
     <div class="bg-shape bg-shape-2"></div>
-    
+
     <div class="pet-page">
-        <header>
-            <nav class="navbar">
-                <div class="logo">
-                    <div class="logo-icon"></div>
-                    Elanco
-                </div>
-                <button class="mobile-menu-button" id="mobile-menu-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-                    </svg>
-                </button>
-                <div class="nav-links" id="nav-links">
-                    <a href="{{ url_for('default') }}">Home</a>
-                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
-                    <a href="{{ url_for('pets') }}">My Pets</a>
-                    <a href="{{ url_for('petliveactivity') }}">Live Activity</a>
-                    <a href="{{ url_for('login') }}" class="login-link">Logout</a>
-                </div>
-            </nav>
-        </header>
+      <header>
+        <nav class="navbar">
+          <div class="logo">
+            <div class="logo-icon"></div>
+            Elanco
+          </div>
+          <button class="mobile-menu-button" id="mobile-menu-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+              />
+            </svg>
+          </button>
+          <div class="nav-links" id="nav-links">
+            <a href="{{ url_for('default') }}">Home</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('pets') }}">My Pets</a>
+            <a href="{{ url_for('petliveactivity') }}">Live Activity</a>
+            <a href="{{ url_for('login') }}" class="login-link">Logout</a>
+          </div>
+        </nav>
+      </header>
 
-        <main>
-            <center>
-                <h1 class="profile-title">Your Pets</h1>
-            </center>
-            <!-- Pet Blocks Section -->
-            <div class="pet-blocks-container">
-                <!-- Cat Block -->
-                <div class="pet-block">
-                    <img src="{{ url_for('static', filename='images/92.jpg') }}" alt="Cat Image">
-                    <h3>Sheila (Cat)</h3>
-                    <a href="{{ url_for('petownerprofile') }}" class="view-analysis-button">View Analysis History</a>
-                </div>
+      <main>
+        <center>
+          <h1 class="profile-title">Your Pets</h1>
+        </center>
+        <!-- Pet Blocks Section -->
+        <div class="pet-blocks-container">
+          <!-- Cat Block -->
+          <div class="pet-block">
+            <img
+              src="{{ url_for('static', filename='images/92.jpg') }}"
+              alt="Cat Image"
+            />
+            <h3>Sheila (Cat)</h3>
+            <a
+              href="{{ url_for('petownerprofile') }}"
+              class="view-analysis-button"
+              >View Analysis History</a
+            >
+          </div>
 
-                <!-- Dog Block -->
-                <div class="pet-block">
-                    <img src="{{ url_for('static', filename='images/Bulldog_inglese.jpg') }}" alt="Dog Image">
-                    <h3>Bob (Dog)</h3>
-                    <a href="{{ url_for('petownerprofile') }}" class="view-analysis-button">View Analysis History</a>
-                </div>
+          <!-- Dog Block -->
+          <div class="pet-block">
+            <img
+              src="{{ url_for('static', filename='images/Bulldog_inglese.jpg') }}"
+              alt="Dog Image"
+            />
+            <h3>Bob (Dog)</h3>
+            <a
+              href="{{ url_for('petownerprofile') }}"
+              class="view-analysis-button"
+              >View Analysis History</a
+            >
+          </div>
 
-                <div class="pet-block">
-                    <img src="{{ url_for('static', filename='images/0be3797d3d.jpg') }}" alt="Dog Image">
-                    <h3>Racket (Dog)</h3>
-                    <a href="{{ url_for('petownerprofile') }}" class="view-analysis-button">View Analysis History</a>
-                </div>
+          <div class="pet-block">
+            <img
+              src="{{ url_for('static', filename='images/0be3797d3d.jpg') }}"
+              alt="Dog Image"
+            />
+            <h3>Racket (Dog)</h3>
+            <a
+              href="{{ url_for('petownerprofile') }}"
+              class="view-analysis-button"
+              >View Analysis History</a
+            >
+          </div>
 
-                <div class="pet-block">
-                    <img src="{{ url_for('static', filename='images/2a40de8365.jpg') }}" alt="Cat Image">
-                    <h3>Chloe (Cat)</h3>
-                    <a href="{{ url_for('petownerprofile') }}" class="view-analysis-button">View Analysis History</a>
-                </div>
-            </div>
-        </main>
+          <div class="pet-block">
+            <img
+              src="{{ url_for('static', filename='images/2a40de8365.jpg') }}"
+              alt="Cat Image"
+            />
+            <h3>Chloe (Cat)</h3>
+            <a
+              href="{{ url_for('petownerprofile') }}"
+              class="view-analysis-button"
+              >View Analysis History</a
+            >
+          </div>
+        </div>
+      </main>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const navLinks = document.getElementById('nav-links');
-            
-            // Mobile menu toggle
-            mobileMenuButton.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const navLinks = document.getElementById("nav-links");
+
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener("click", () => {
+          navLinks.classList.toggle("active");
         });
+      });
     </script>
-</body>
-</html> 
+  </body>
+</html>

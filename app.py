@@ -363,7 +363,7 @@ def petownerprofile():
 @app.route('/petpage-analysis', methods=['GET'])
 def petpageanalysis():
     """Render the pet page analysis"""
-    return render_template('petpage_analysis')
+    return render_template('petpage_analysis.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
