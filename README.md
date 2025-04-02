@@ -60,14 +60,15 @@ Follow these steps to set up and run the app locally:
 ### **4. Add Environment Variables**
 
 - Create a .env file in the root directory and include the following:
-
-AZURE_PROJECT_ID=your_project_id
-AZURE_ITERATION_NAME=your_iteration_name
-AZURE_KEY=your_azure_key
-AZURE_ENDPOINT=https://your-custom-vision-endpoint.com
-UPLOAD_FOLDER=static/uploads
+##
+      AZURE_PROJECT_ID=your_project_id
+      AZURE_ITERATION_NAME=your_iteration_name
+      AZURE_KEY=your_azure_key
+      AZURE_ENDPOINT=https://your-custom-vision-endpoint.com
+      UPLOAD_FOLDER=static/uploads
 
 (Replace placeholders with your Azure Custom Vision project details).
+##
 
 ### **5. Run the App**
 
