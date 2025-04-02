@@ -6,7 +6,6 @@ from io import BytesIO
 class FlaskAppTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # Create a test client from your Flask app
         cls.client = app.test_client()
         app.testing = True
 
@@ -21,17 +20,8 @@ class FlaskAppTests(unittest.TestCase):
         self.assertIn(b'No file uploaded or selected', response.data)  # Updated to match the response
 
 
- ##   def test_analysis_success(self):
-        # Simulate a file upload using mock data
-    ##    response = self.client.post('/analysis', data={
-    ##    'file': (BytesIO(b'fake image data'), 'test_image.jpg')  # Mock file stream
-    ##    })
-    ##    self.assertEqual(response.status_code, 200)
-    ##    self.assertIn(b'Analysis successful', response.data)
-
-
     def test_home_route(self):
-        response = self.client.get('/home')  # Ensure this points to the correct route
+        response = self.client.get('/home') 
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Elanco Animal Behavior Analysis', response.data)  # Matches the <title> tag
 
@@ -68,7 +58,7 @@ class FlaskAppTests(unittest.TestCase):
         self.assertEqual(response.status_code, 400)  # Missing 'pet_name'
 
     def test_non_existent_pet(self):
-        response = self.client.get('/pets/99999')  # Assuming ID 99999 doesn't exist
+        response = self.client.get('/pets/99999') 
         self.assertEqual(response.status_code, 404)  # Pet not found
 
     def test_response_time(self):
