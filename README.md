@@ -29,28 +29,28 @@ Follow these steps to set up and run the app locally:
 
 - Open your PowerShell terminal and execute:
 ##
-    git clone https://github.com/Sammiejohnsonnl/Elanco3.git
+      git clone https://github.com/Sammiejohnsonnl/Elanco3.git
 
 - Navigate to the project folder and switch to the "azureAIPrototype" branch:
 ##
-    cd Elanco3
-    git checkout azureAIPrototype
+      cd Elanco3
+      git checkout azureAIPrototype
 
 ### **2. Set Up a Virtual Environment**
 
 - Create and activate a virtual environment to isolate dependencies:
-
-python -m venv env
+##
+      python -m venv env
 
 - Activate the virtual environment:
-
-.\env\Scripts\Activate.ps1
+##
+      .\env\Scripts\Activate.ps1
 
 ### **3. Install Dependencies**
 
 - Install the required Python packages:
-
-pip install -r requirements.txt
+##
+      pip install -r requirements.txt
 
 ### **4. Add Environment Variables**
 
@@ -67,12 +67,12 @@ UPLOAD_FOLDER=static/uploads
 ### **5. Run the App**
 
 - Start the Flask development server:
-
-flask run
+##
+      flask run
 
 - Access the app in your browser at:
 
-http://127.0.0.1:5000
+      http://127.0.0.1:5000
 
 ## **Deployment**
 
