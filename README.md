@@ -28,11 +28,12 @@ Follow these steps to set up and run the app locally:
 ### **1. Clone the Repository**
 
 - Open your PowerShell terminal and execute:
-##
+
       git clone https://github.com/Sammiejohnsonnl/Elanco3.git
+##
 
 - Navigate to the project folder and switch to the "azureAIPrototype" branch:
-##
+
       cd Elanco3
       git checkout azureAIPrototype
 ##
@@ -40,12 +41,14 @@ Follow these steps to set up and run the app locally:
 ### **2. Set Up a Virtual Environment**
 
 - Create and activate a virtual environment to isolate dependencies:
-##
+
       python -m venv env
+##
 
 - Activate the virtual environment:
-##
+
       .\env\Scripts\Activate.ps1
+##
 
 ### **3. Install Dependencies**
 
@@ -68,12 +71,14 @@ UPLOAD_FOLDER=static/uploads
 ### **5. Run the App**
 
 - Start the Flask development server:
-##
+
       flask run
+##
 
 - Access the app in your browser at:
 
       http://127.0.0.1:5000
+##
 
 ## **Deployment**
 
@@ -90,7 +95,8 @@ UPLOAD_FOLDER=static/uploads
    - Push the repository to an Azure DevOps or GitHub.
    - Switch to the "azureAIPrototype" branch.
    - Use Azure CLI to deploy:
-     az webapp up --name your-app-name --runtime PYTHON:3.10
+
+           az webapp up --name your-app-name --runtime PYTHON:3.10
 
    - Alternatively, use the deployment pipelines provided in Azure.
 
@@ -108,7 +114,8 @@ UPLOAD_FOLDER=static/uploads
 
 Unit tests for routes and functionalities are provided in the test_app.py file. Run them in the terminal using:
 
-python test_app.py
+      python test_app.py
+##
 
 ## **Performance and Accessibility Testing**
 
@@ -136,10 +143,13 @@ The app has been tested with:
 
 - Template Errors:
 
-  -     Ensure all HTML files are stored in the templates/ directory.
+  - Ensure all HTML files are stored in the templates/ directory.
 
 ## **Repository Link**
 
 Explore the source code here: [GitHub Repository](https://github.com/Sammiejohnsonnl/Elanco3.git)
 Switch to the azureAIPrototype branch to access the source code:
-git checkout azureAIPrototype
+
+      git checkout azureAIPrototype
+##
+
